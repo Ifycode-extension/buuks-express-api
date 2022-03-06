@@ -1,8 +1,8 @@
 import { Express, Request, Response } from 'express';
+import { getDemoItemsHandler } from './controllers/demo.controller';
+
 const routes = (app: Express) => {
-  app.get('/demo', (req: Request, res: Response) => {
-    res.sendStatus(200);
-  });
+  app.get('/demo', getDemoItemsHandler);
 }
 
 export default routes;
