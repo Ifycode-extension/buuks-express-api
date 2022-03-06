@@ -1,11 +1,13 @@
+import mongooseConnect from './db';
 import { app } from './app';
 //import chalk from 'chalk';
 
 const port = process.env.PORT || 3000;
 
-app.listen(port, () => {
+app.listen(port, async () => {
   try {
     console.log(`\nServer running at http://localhost:${port}`);
+    await mongooseConnect();
     //console.log(chalk.cyanBright(`\nServer running at http://localhost:${port}`));
   } catch (err) {
     console.log(err);
