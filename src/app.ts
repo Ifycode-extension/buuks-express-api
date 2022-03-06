@@ -38,21 +38,3 @@ app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
 });
 
 export { app };
-
-
-
-
-
-
-// import express from 'express';
-// //import routes from './api/routes';
-
-// const app = express();
-
-// //routes(app);
-
-// //appUse(main, ) {
-//   app.use('/test', );
-// //}
-
-// export { app };
