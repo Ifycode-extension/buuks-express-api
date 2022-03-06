@@ -1,4 +1,4 @@
-import express, { Express } from 'express';
+import express, { Express, NextFunction, Request, Response } from 'express';
 import dotenv from 'dotenv';
 import morgan from 'morgan';
 import cors from 'cors';
@@ -16,6 +16,26 @@ app.use(express.json());
 app.use(cors({ origin: `http://localhost:${process.env.CLIENT_PORT}` }));
 
 app.use('/', appController);
+
+interface Error {
+  status?: number;
+  message: string;
+}
+
+app.use((req: Request, res: Response, next: NextFunction) => {
+  const err: Error = new Error('Route not found!');
+  err.status = 404;
+  next(err);
+});
+
+app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
+  res.status(err.status || 500);
+  res.json({
+    error: {
+      message: err.message
+    }
+  });
+});
 
 export { app };
 
