@@ -2,7 +2,7 @@ import mongoose from 'mongoose';
 
 export interface DemoDocument extends mongoose.Document {
   name: string;
-  age: Number;
+  age: number;
 }
 
 const collectionName = 'demo';
