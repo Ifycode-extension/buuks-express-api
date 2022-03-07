@@ -15,10 +15,23 @@ let item = `${routeName}-item`;
 
 export const getDemoItemsHandler = async (req: Request, res: Response) => {
   try {
-    let doc = await getDemoItems();
-    // TODO: Format doc to the desired response shape
-    res.status(200).json(doc);
-    return doc;
+    let docs = await getDemoItems();
+    const response = {
+      count: docs.length,
+      items: docs.map(doc => {
+        return {
+          _id: doc._id,
+          name: doc.name,
+          age: doc.age,
+          request: {
+            type: 'GET',
+            url: `http://localhost:3000/${routeName}/${doc._id}`
+          }
+        }
+      })
+    };
+    res.status(200).json(response);
+    return response;
   } catch (err) {
     res.status(500).json({
       error: `${err}`
