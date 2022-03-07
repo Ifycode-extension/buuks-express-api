@@ -5,15 +5,14 @@ import { getDemoItems } from '../services/demo.service';
 // let item = `${routeName}-item`;
 
 export const getDemoItemsHandler = async (req: Request, res: Response) => {
-
-  return await getDemoItems(req, res);
-  // try {
-  //   //let demo = await getDemoItems();
-  //   res.status(200).send('yay!');
-  //   //return demo;
-  //   console.log(`\nGET request successful! \n\nRunning at http://localhost:3000/${routeName}/\n`);
-  // } catch (err) {
-  //   console.log(err);
-  //   return res.status(500).send(err.message);
-  // }
+  try {
+    let doc = await getDemoItems();
+    // TODO: Format doc to to desired response shape.
+    res.status(200).json(doc);
+    return doc;
+  } catch (err) {
+    res.status(500).json({
+      error: `${err}`
+    });
+  }
 }
