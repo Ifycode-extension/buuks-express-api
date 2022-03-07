@@ -16,8 +16,10 @@ app.use(express.urlencoded({
 app.use(express.json());
 app.use(cors({ origin: `http://localhost:${process.env.CLIENT_PORT}` }));
 
+//======== Routes ==========
 app.use('/', appRouter);
 app.use('/demo', demoRouter);
+//==========================
 
 interface Error {
   status?: number;
