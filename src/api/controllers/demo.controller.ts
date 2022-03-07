@@ -1,7 +1,12 @@
-import { Request, Response } from 'express';
+import {
+  NextFunction,
+  Request,
+  Response
+} from 'express';
 import {
   getDemoItems,
-  createDemoItem
+  createDemoItem,
+  getOneDemoItem
 } from '../services/demo.service';
 
 let routeName = 'demo';
@@ -38,6 +43,34 @@ export const createDemoItemHandler = async (req: Request, res: Response) => {
     return doc;
   } catch (err) {
     res.status(500).json({
+      error: `${err}`
+    });
+  }
+}
+
+export const getOneDemoItemHandler = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    let doc = await getOneDemoItem(req.params.demoId);
+    if (doc) {
+      res.status(200).json({
+        _id: doc._id,
+        name: doc.name,
+        age: doc.age,
+        request: {
+          type: 'GET',
+          description: `Url link to all ${item}s`,
+          url: `http://localhost:3000/${routeName}/`
+        }
+      });
+      return doc;
+    } else {
+      return res.status(404).json({
+        message: 'No record found for provided ID'
+      });
+    }
+  } catch (err) {
+    res.status(500).json({
+      message: 'Invalid ID',
       error: `${err}`
     });
   }

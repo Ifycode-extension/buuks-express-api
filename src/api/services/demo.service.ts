@@ -15,3 +15,8 @@ export const createDemoItem = async (requestBody: DocumentDefinition<DemoDocumen
   const save = await demo.save();
   return save;
 }
+
+export const getOneDemoItem = async (paramsId: string) => {
+  const query = Demo.findById(paramsId).select('_id name age').exec();
+  return query;
+}
