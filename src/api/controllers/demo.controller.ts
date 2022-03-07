@@ -6,7 +6,8 @@ import {
 import {
   getDemoItems,
   createDemoItem,
-  getOneDemoItem
+  getOneDemoItem,
+  deleteDemoItem
 } from '../services/demo.service';
 
 let routeName = 'demo';
@@ -71,6 +72,29 @@ export const getOneDemoItemHandler = async (req: Request, res: Response, next: N
   } catch (err) {
     res.status(500).json({
       message: 'Invalid ID',
+      error: `${err}`
+    });
+  }
+}
+
+export const deleteDemoItemHandler = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    let doc = await deleteDemoItem(req.params.demoId);
+    res.status(200).json({
+      message: `${item} deleted successfully!`,
+      request: {
+        type: 'POST',
+        description: 'Url link to make post request to',
+        url: `http://localhost:3000/${item}/`,
+        body: {
+          name: 'String',
+          age: 'Number'
+        }
+      }
+    });
+  } catch (err) {
+    res.status(500).json({
+      message: `Error deleting ${item}`,
       error: `${err}`
     });
   }
