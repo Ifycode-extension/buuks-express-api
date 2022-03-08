@@ -3,7 +3,7 @@ import dotenv from 'dotenv';
 import morgan from 'morgan';
 import cors from 'cors';
 import { router as appRouter } from './api/routes/app.route';
-import { router as demoRouter } from './api/routes/demo.route';
+import { router as bookRouter } from './api/routes/book.route';
 import { router as userRouter } from './api/routes/user.route'
 dotenv.config();
 
@@ -18,7 +18,7 @@ app.use(cors({ origin: `http://localhost:${process.env.CLIENT_PORT}` }));
 
 //======== Routes ==========
 app.use('/', appRouter);
-app.use('/demo', demoRouter);
+app.use('/books', bookRouter);
 app.use('/users', userRouter);
 //==========================
 

@@ -4,18 +4,18 @@ import {
   Response
 } from 'express';
 import {
-  getDemoItems,
-  createDemoItem,
-  getOneDemoItem,
-  deleteDemoItem
-} from '../services/demo.service';
+  getBooks,
+  createBook,
+  getOneBook,
+  deleteBook
+} from '../services/book.service';
 
-let routeName = 'demo';
+let routeName = 'book';
 let item = `${routeName}-item`;
 
-export const getDemoItemsHandler = async (req: Request, res: Response) => {
+export const getBooksHandler = async (req: Request, res: Response) => {
   try {
-    let docs = await getDemoItems();
+    let docs = await getBooks();
     const response = {
       count: docs.length,
       items: docs.map(doc => {
@@ -39,9 +39,9 @@ export const getDemoItemsHandler = async (req: Request, res: Response) => {
   }
 }
 
-export const createDemoItemHandler = async (req: Request, res: Response) => {
+export const createBookHandler = async (req: Request, res: Response) => {
   try {
-    let doc = await createDemoItem(req.body);
+    let doc = await createBook(req.body);
     res.status(201).json({
       message: `${item} created successfully!`,
       newItem: {
@@ -62,9 +62,9 @@ export const createDemoItemHandler = async (req: Request, res: Response) => {
   }
 }
 
-export const getOneDemoItemHandler = async (req: Request, res: Response, next: NextFunction) => {
+export const getOneBookHandler = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    let doc = await getOneDemoItem(req.params.demoId);
+    let doc = await getOneBook(req.params.bookId);
     if (doc) {
       res.status(200).json({
         _id: doc._id,
@@ -90,9 +90,9 @@ export const getOneDemoItemHandler = async (req: Request, res: Response, next: N
   }
 }
 
-export const deleteDemoItemHandler = async (req: Request, res: Response, next: NextFunction) => {
+export const deleteBookHandler = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    let doc = await deleteDemoItem(req.params.demoId);
+    let doc = await deleteBook(req.params.bookId);
     res.status(200).json({
       message: `${item} deleted successfully!`,
       request: {
