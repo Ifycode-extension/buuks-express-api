@@ -9,6 +9,9 @@ import {
   getOneBook,
   deleteBook
 } from '../services/book.service';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 let book: string = 'book';
 let routeName: string = `${book}s`;
@@ -25,7 +28,7 @@ export const getBooksHandler = async (req: Request, res: Response) => {
           description: doc.description,
           request: {
             type: 'GET',
-            url: `http://localhost:3000/${routeName}/${doc._id}`
+            url: `${process.env.LOCALHOST_URL}/${routeName}/${doc._id}`
           }
         }
       })
@@ -44,19 +47,19 @@ export const createBookHandler = async (req: Request, res: Response) => {
     let doc = await createBook(req.body);
     res.status(201).json({
       message: `${book} created successfully!`,
-      newBook: {
+      book: {
         _id: doc._id,
         title: doc.title,
         description: doc.description,
         request: {
           type: 'GET',
-          url: `http://localhost:3000/${routeName}/${doc._id}`
+          url: `${process.env.LOCALHOST_URL}/${routeName}/${doc._id}`
         }
       }
     });
     return doc;
   } catch (err) {
-    res.status(500).json({
+    res.status(409).json({
       error: `${err}`
     });
   }
@@ -73,7 +76,7 @@ export const getOneBookHandler = async (req: Request, res: Response, next: NextF
         request: {
           type: 'GET',
           description: `Url link to all ${book}s`,
-          url: `http://localhost:3000/${routeName}/`
+          url: `${process.env.LOCALHOST_URL}/${routeName}/`
         }
       });
       return doc;
@@ -98,7 +101,7 @@ export const deleteBookHandler = async (req: Request, res: Response, next: NextF
       request: {
         type: 'POST',
         description: 'Url link to make post request to',
-        url: `http://localhost:3000/${routeName}/`,
+        url: `${process.env.LOCALHOST_URL}/${routeName}/`,
         body: {
           title: 'String',
           description: 'String'
