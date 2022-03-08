@@ -10,15 +10,15 @@ import {
   deleteBook
 } from '../services/book.service';
 
-let routeName = 'book';
-let item = `${routeName}-item`;
+let book: string = 'book';
+let routeName: string = `${book}s`;
 
 export const getBooksHandler = async (req: Request, res: Response) => {
   try {
     let docs = await getBooks();
     const response = {
       count: docs.length,
-      items: docs.map(doc => {
+      books: docs.map(doc => {
         return {
           _id: doc._id,
           title: doc.title,
@@ -43,8 +43,8 @@ export const createBookHandler = async (req: Request, res: Response) => {
   try {
     let doc = await createBook(req.body);
     res.status(201).json({
-      message: `${item} created successfully!`,
-      newItem: {
+      message: `${book} created successfully!`,
+      newBook: {
         _id: doc._id,
         title: doc.title,
         description: doc.description,
@@ -72,7 +72,7 @@ export const getOneBookHandler = async (req: Request, res: Response, next: NextF
         description: doc.description,
         request: {
           type: 'GET',
-          description: `Url link to all ${item}s`,
+          description: `Url link to all ${book}s`,
           url: `http://localhost:3000/${routeName}/`
         }
       });
@@ -94,20 +94,20 @@ export const deleteBookHandler = async (req: Request, res: Response, next: NextF
   try {
     let doc = await deleteBook(req.params.bookId);
     res.status(200).json({
-      message: `${item} deleted successfully!`,
+      message: `${book} deleted successfully!`,
       request: {
         type: 'POST',
         description: 'Url link to make post request to',
-        url: `http://localhost:3000/${item}/`,
+        url: `http://localhost:3000/${routeName}/`,
         body: {
           title: 'String',
-          description: 'Number'
+          description: 'String'
         }
       }
     });
   } catch (err) {
     res.status(500).json({
-      message: `Error deleting ${item}`,
+      message: `Error deleting ${book}`,
       error: `${err}`
     });
   }
