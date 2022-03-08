@@ -21,8 +21,8 @@ export const getBooksHandler = async (req: Request, res: Response) => {
       items: docs.map(doc => {
         return {
           _id: doc._id,
-          name: doc.name,
-          age: doc.age,
+          title: doc.title,
+          description: doc.description,
           request: {
             type: 'GET',
             url: `http://localhost:3000/${routeName}/${doc._id}`
@@ -46,8 +46,8 @@ export const createBookHandler = async (req: Request, res: Response) => {
       message: `${item} created successfully!`,
       newItem: {
         _id: doc._id,
-        name: doc.name,
-        age: doc.age,
+        title: doc.title,
+        description: doc.description,
         request: {
           type: 'GET',
           url: `http://localhost:3000/${routeName}/${doc._id}`
@@ -68,8 +68,8 @@ export const getOneBookHandler = async (req: Request, res: Response, next: NextF
     if (doc) {
       res.status(200).json({
         _id: doc._id,
-        name: doc.name,
-        age: doc.age,
+        title: doc.title,
+        description: doc.description,
         request: {
           type: 'GET',
           description: `Url link to all ${item}s`,
@@ -100,8 +100,8 @@ export const deleteBookHandler = async (req: Request, res: Response, next: NextF
         description: 'Url link to make post request to',
         url: `http://localhost:3000/${item}/`,
         body: {
-          name: 'String',
-          age: 'Number'
+          title: 'String',
+          description: 'Number'
         }
       }
     });
