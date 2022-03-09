@@ -5,6 +5,8 @@ import cors from 'cors';
 import { router as appRouter } from './api/routes/app.route';
 import { router as bookRouter } from './api/routes/book.route';
 import { router as userRouter } from './api/routes/user.route'
+import { router as sessionRouter } from './api/routes/session.route';
+
 dotenv.config();
 
 const app: Express = express();
@@ -20,6 +22,7 @@ app.use(cors({ origin: `http://localhost:${process.env.CLIENT_PORT}` }));
 app.use('/', appRouter);
 app.use('/books', bookRouter);
 app.use('/users', userRouter);
+app.use('/sessions', sessionRouter);
 //==========================
 
 interface Error {
