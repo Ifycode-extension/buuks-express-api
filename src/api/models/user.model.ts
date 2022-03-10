@@ -10,6 +10,7 @@ export interface UserDocument extends mongoose.Document {
   name: string;
   createdAt: Date;
   updatedAt: Date;
+  comparePassword(candidatePassword: string): Promise<Boolean>;
 }
 
 const collectionName = 'user';
