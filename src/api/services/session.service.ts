@@ -12,7 +12,6 @@ export const createSessionService = async (userId: string, userAgent: string) =>
 
 // find sessions
 export const getUserSessionsService = async (query: FilterQuery<SessionDocument>) => {
-  console.log('Query: ', query);
   return await SessionModel.find(query).lean();
 }
 
@@ -21,5 +20,6 @@ export const updateUserSessionService = async (
   query: FilterQuery<SessionDocument>,
   update: UpdateQuery<SessionDocument>
 ) => {
-  return SessionModel.deleteOne(query, update); //deleteOne works instead of updateOne
+  //deleteOne works instead of updateOne
+  return SessionModel.deleteOne(query, update);
 }

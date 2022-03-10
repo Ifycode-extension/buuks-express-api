@@ -62,8 +62,6 @@ export const deleteUserSessionControllerHandler = async (req: Request, res: Resp
   // set valid (for a session) to false so that user is not able to reuse that session
   const test = await updateUserSessionService({ _id: sessionId }, { valid: false });
 
-  console.log(test);
-
   return res.status(200).json({
     accessToken: null,
     refreshToken: null,
