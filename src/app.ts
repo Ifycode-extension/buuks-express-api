@@ -1,7 +1,7 @@
 import express, { Express, NextFunction, Request, Response } from 'express';
 import dotenv from 'dotenv';
 import morgan from 'morgan';
-import cors from 'cors';
+// import cors from 'cors';
 import { router as appRouter } from './api/routes/app.route';
 import { router as bookRouter } from './api/routes/book.route';
 import { router as userRouter } from './api/routes/user.route'
@@ -18,10 +18,10 @@ app.use(express.urlencoded({
 }));
 app.use(express.json());
 
+//app.use(cors({ origin: `http://localhost:${process.env.CLIENT_PORT}` }));
+
 // Ensures deserializeUser middleware is called on every single route
 app.use(deserializeUser);
-
-app.use(cors({ origin: `http://localhost:${process.env.CLIENT_PORT}` }));
 
 //======== Routes ==========
 app.use('/', appRouter);

@@ -32,7 +32,7 @@ export const createSessionControllerHandler = async (req: Request, res: Response
     // create an refresh token
     const refreshToken = signJwt(
       { ...user, session: session._id },
-      { expiresIn: `${process.env.ACCESSTOKEN_TTL}` } // will live for the duration of e.g. year specified in the .env file
+      { expiresIn: `${process.env.REFRESHTOKEN_TTL}` } // will live for the duration of e.g. year specified in the .env file
     );
 
     //return access and refresh token

@@ -22,6 +22,6 @@ const SessionSchema = new mongoose.Schema(
   }
 );
 
-const SessionModel = mongoose.model(collectionName, SessionSchema, collectionName); //declare collection name a second time to prevent mongoose from pluralizing or adding 's' to the collection name
+const SessionModel = mongoose.model<SessionDocument>(collectionName, SessionSchema, collectionName); //declare collection name a second time to prevent mongoose from pluralizing or adding 's' to the collection name
 
 export { SessionModel };
