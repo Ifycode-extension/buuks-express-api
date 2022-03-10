@@ -2,7 +2,8 @@ import { Request, Response } from 'express';
 import { signJwt } from '../../utils/jwt.utils';
 import {
   createSessionService,
-  getUserSessionsService
+  getUserSessionsService,
+  updateUserSessionService
 } from '../services/session.service';
 import { validatePasswordService } from '../services/user.service';
 
@@ -52,4 +53,19 @@ export const getUserSessionsControllerHandler = async (req: Request, res: Respon
   const sessions = await getUserSessionsService({ user: userId, valid: true });
   // console.log('Sessions: ', sessions);
   return res.status(200).json(sessions);
+}
+
+export const deleteUserSessionControllerHandler = async (req: Request, res: Response) => {
+
+  const sessionId = res.locals.user.session;
+
+  // set valid (for a session) to false so that user is not able to reuse that session
+  const test = await updateUserSessionService({ _id: sessionId }, { valid: false });
+
+  console.log(test);
+
+  return res.status(200).json({
+    accessToken: null,
+    refreshToken: null,
+  });
 }
