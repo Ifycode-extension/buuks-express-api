@@ -6,6 +6,7 @@ import { router as appRouter } from './api/routes/app.route';
 import { router as bookRouter } from './api/routes/book.route';
 import { router as userRouter } from './api/routes/user.route'
 import { router as sessionRouter } from './api/routes/session.route';
+import deserializeUser from './middleware/deserializeUser';
 
 dotenv.config();
 
@@ -16,6 +17,10 @@ app.use(express.urlencoded({
   extended: false
 }));
 app.use(express.json());
+
+// Ensures deserializeUser middleware is called on every single route
+app.use(deserializeUser);
+
 app.use(cors({ origin: `http://localhost:${process.env.CLIENT_PORT}` }));
 
 //======== Routes ==========

@@ -1,6 +1,9 @@
 import { Request, Response } from 'express';
 import { signJwt } from '../../utils/jwt.utils';
-import { createSessionService } from '../services/session.service';
+import {
+  createSessionService,
+  getUserSessionsService
+} from '../services/session.service';
 import { validatePasswordService } from '../services/user.service';
 
 export const createSessionControllerHandler = async (req: Request, res: Response) => {
@@ -41,4 +44,12 @@ export const createSessionControllerHandler = async (req: Request, res: Response
       error: err.message
     });
   }
+}
+
+export const getUserSessionsControllerHandler = async (req: Request, res: Response) => {
+  const userId = res.locals.user._id;
+  // console.log('userId: ', userId);
+  const sessions = await getUserSessionsService({ user: userId, valid: true });
+  // console.log('Sessions: ', sessions);
+  return res.status(200).json(sessions);
 }
