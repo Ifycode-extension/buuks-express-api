@@ -35,7 +35,8 @@ export const reIssueAccessToken = async ({ refreshToken }: { refreshToken: strin
 
   const session = await SessionModel.findById(get(decoded, 'session'));
 
-  if (!session || !session.valid) return false;
+  // if (!session || !session.valid) return false; (removing !session.valid from the if statement fixed the issue)
+  if (!session) return false;
 
   const user = await findUserService({ _id: session.user });
 
