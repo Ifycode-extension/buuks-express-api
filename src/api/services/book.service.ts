@@ -6,13 +6,8 @@ export const getBooks = async () => {
   return query;
 }
 
-export const createBook = async (requestBody: DocumentDefinition<BookDocument>) => {
-  let book = new Book({
-    title: requestBody.title,
-    description: requestBody.description
-  });
-
-  const save = await book.save();
+export const createBookService = async (input: DocumentDefinition<Omit<BookDocument, 'createdAt' | 'updatedAt'>>) => {
+  const save = Book.create(input);
   return save;
 }
 

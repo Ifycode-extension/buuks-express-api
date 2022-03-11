@@ -5,11 +5,12 @@ import {
 } from 'express';
 import {
   getBooks,
-  createBook,
+  createBookService,
   getOneBook,
   deleteBook
 } from '../services/book.service';
 import dotenv from 'dotenv';
+import { CreateBookInput } from '../../middleware/schema/book.schema';
 
 dotenv.config();
 
@@ -42,22 +43,26 @@ export const getBooksHandler = async (req: Request, res: Response) => {
   }
 }
 
-export const createBookHandler = async (req: Request, res: Response) => {
+export const createBookController = async (req: Request<{}, {}, CreateBookInput['body']>, res: Response) => {
   try {
-    let doc = await createBook(req.body);
-    res.status(201).json({
-      message: `${book} created successfully!`,
+    const userId = res.locals.user._id;
+    const body = req.body;
+    const doc = await createBookService({ ...body, user: userId });
+    return res.status(201).json({
+      message: `New ${book} created successfully!`,
       book: {
         _id: doc._id,
         title: doc.title,
         description: doc.description,
+        pdf: doc.pdf,
+        user: doc.user,
         request: {
           type: 'GET',
-          url: `${process.env.LOCALHOST_URL}/${routeName}/${doc._id}`
+          url: `${process.env.LOCALHOST_URL}/${routeName}/${doc._id}`,
+          description: 'Get this single product by ID at the above url'
         }
       }
     });
-    return doc;
   } catch (err) {
     res.status(409).json({
       error: `${err}`
