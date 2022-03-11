@@ -52,6 +52,6 @@ UserSchema.methods.comparePassword = async function (enteredPassword: string): P
   return bcrypt.compare(enteredPassword, user.password).catch((err) => false);
 }
 
-const UserModel = mongoose.model(collectionName, UserSchema, collectionName); //declare collection name a second time to prevent mongoose from pluralizing or adding 's' to the collection name
+const UserModel = mongoose.model<UserDocument>(collectionName, UserSchema, collectionName); //declare collection name a second time to prevent mongoose from pluralizing or adding 's' to the collection name
 
 export { UserModel };
