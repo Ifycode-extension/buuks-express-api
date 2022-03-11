@@ -72,9 +72,7 @@ export const createBookController = async (req: Request<{}, {}, CreateBookInput[
 
 export const getOneBookController = async (req: Request<GetOneBookInput['params']>, res: Response, next: NextFunction) => {
   try {
-    const userId = res.locals.user._id;
     const bookId = req.params.bookId;
-    const body = req.body;
     const doc = await getOneBookService({ bookId });
     if (doc) {
       return res.status(200).json({
