@@ -16,8 +16,21 @@ const payload = {
   }),
 }
 
+const params = {
+  params: object({
+    bookId: string({
+      required_error: 'bookId is required'
+    }),
+  }),
+}
+
 export const createBookSchema = object({
   ...payload
 });
 
+export const getOneBookSchema = object({
+  ...params
+});
+
 export type CreateBookInput = TypeOf<typeof createBookSchema>;
+export type GetOneBookInput = TypeOf<typeof getOneBookSchema>;

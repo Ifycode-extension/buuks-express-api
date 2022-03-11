@@ -1,4 +1,4 @@
-import { DocumentDefinition } from 'mongoose';
+import { DocumentDefinition, FilterQuery, QueryOptions } from 'mongoose';
 import { BookDocument, BookModel as Book } from '../models/book.model';
 
 export const getBooks = async () => {
@@ -11,9 +11,9 @@ export const createBookService = async (input: DocumentDefinition<Omit<BookDocum
   return save;
 }
 
-export const getOneBook = async (paramsId: string) => {
-  const query = Book.findById(paramsId).select('_id title description').exec();
-  return query;
+export const getOneBookService = async (query: FilterQuery<BookDocument>, options: QueryOptions = { lean: true }) => {
+  const findone = Book.findOne(query, {}, options);
+  return findone;
 }
 
 export const deleteBook = async (paramsId: string) => {
