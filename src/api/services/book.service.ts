@@ -1,4 +1,3 @@
-import mongoose from 'mongoose';
 import { DocumentDefinition, FilterQuery, QueryOptions } from 'mongoose';
 import { BookDocument, BookModel as Book } from '../models/book.model';
 
@@ -18,6 +17,6 @@ export const getOneBookService = async (query: FilterQuery<BookDocument>, option
 }
 
 export const deleteBookService = async (query: FilterQuery<BookDocument>) => {
-  const deleteone = await Book.deleteOne(query);
+  const deleteone = await Book.findByIdAndDelete(query);
   return deleteone;
 }

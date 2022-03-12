@@ -117,7 +117,7 @@ export const deleteBookController = async (req: Request<DeleteBookInput['params'
       return res.sendStatus(403);
     }
 
-    await deleteBookService({ bookId });
+    await deleteBookService(bookId);
 
     res.status(200).json({
       message: `${bookItem} deleted successfully!`,
