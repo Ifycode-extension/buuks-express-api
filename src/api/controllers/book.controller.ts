@@ -1,24 +1,26 @@
+import mongoose from 'mongoose';
 import {
   NextFunction,
   Request,
   Response
 } from 'express';
 import {
-  getBooks,
-  createBook,
-  getOneBook,
-  deleteBook
+  getBooksService,
+  createBookService,
+  getOneBookService,
+  deleteBookService
 } from '../services/book.service';
 import dotenv from 'dotenv';
+import { CreateBookInput, DeleteBookInput, GetOneBookInput } from '../../middleware/schema/book.schema';
 
 dotenv.config();
 
-let book: string = 'book';
-let routeName: string = `${book}s`;
+let bookItem: string = 'book';
+let routeName: string = `${bookItem}s`;
 
-export const getBooksHandler = async (req: Request, res: Response) => {
+export const getBooksController = async (req: Request, res: Response) => {
   try {
-    let docs = await getBooks();
+    let docs = await getBooksService();
     const response = {
       count: docs.length,
       books: docs.map(doc => {
@@ -42,22 +44,26 @@ export const getBooksHandler = async (req: Request, res: Response) => {
   }
 }
 
-export const createBookHandler = async (req: Request, res: Response) => {
+export const createBookController = async (req: Request<{}, {}, CreateBookInput['body']>, res: Response) => {
   try {
-    let doc = await createBook(req.body);
-    res.status(201).json({
-      message: `${book} created successfully!`,
+    const userId = res.locals.user._id;
+    const body = req.body;
+    const doc = await createBookService({ ...body, user: userId });
+    return res.status(201).json({
+      message: `New ${bookItem} created successfully!`,
       book: {
         _id: doc._id,
         title: doc.title,
         description: doc.description,
+        pdf: doc.pdf,
+        user: doc.user,
         request: {
           type: 'GET',
-          url: `${process.env.LOCALHOST_URL}/${routeName}/${doc._id}`
+          url: `${process.env.LOCALHOST_URL}/${routeName}/${doc._id}`,
+          description: 'Get this single product by ID at the above url'
         }
       }
     });
-    return doc;
   } catch (err) {
     res.status(409).json({
       error: `${err}`
@@ -65,52 +71,65 @@ export const createBookHandler = async (req: Request, res: Response) => {
   }
 }
 
-export const getOneBookHandler = async (req: Request, res: Response, next: NextFunction) => {
+export const getOneBookController = async (req: Request<GetOneBookInput['params']>, res: Response, next: NextFunction) => {
   try {
-    let doc = await getOneBook(req.params.bookId);
+    const bookId = new mongoose.Types.ObjectId(req.params.bookId);
+    const doc = await getOneBookService(bookId);
     if (doc) {
-      res.status(200).json({
+      return res.status(200).json({
         _id: doc._id,
         title: doc.title,
         description: doc.description,
+        pdf: doc.pdf,
+        user: doc.user,
         request: {
           type: 'GET',
-          description: `Url link to all ${book}s`,
-          url: `${process.env.LOCALHOST_URL}/${routeName}/`
+          url: `${process.env.LOCALHOST_URL}/${routeName}`,
+          description: `Get the list of all ${bookItem}s for this user at the above url`,
         }
       });
-      return doc;
     } else {
       return res.status(404).json({
         message: 'No record found for provided ID'
       });
     }
   } catch (err) {
-    res.status(500).json({
+    return res.status(500).json({
       message: 'Invalid ID',
       error: `${err}`
     });
   }
 }
 
-export const deleteBookHandler = async (req: Request, res: Response, next: NextFunction) => {
+export const deleteBookController = async (req: Request<DeleteBookInput['params']>, res: Response, next: NextFunction) => {
   try {
-    let doc = await deleteBook(req.params.bookId);
+    const userId = res.locals.user._id;
+    const bookId = new mongoose.Types.ObjectId(req.params.bookId);
+    const book = await getOneBookService(bookId);
+
+    if (!book) {
+      return res.status(404).json({
+        message: 'No record found for provided ID'
+      });
+    }
+
+    if (book.user.toString() !== userId) {
+      return res.sendStatus(403);
+    }
+
+    await deleteBookService(bookId);
+
     res.status(200).json({
-      message: `${book} deleted successfully!`,
+      message: `${bookItem} deleted successfully!`,
       request: {
         type: 'POST',
-        description: 'Url link to make post request to',
-        url: `${process.env.LOCALHOST_URL}/${routeName}/`,
-        body: {
-          title: 'String',
-          description: 'String'
-        }
+        url: `${process.env.LOCALHOST_URL}/${routeName}`,
+        description: 'Create a new product at the above url'
       }
     });
   } catch (err) {
     res.status(500).json({
-      message: `Error deleting ${book}`,
+      message: `Error deleting ${bookItem}`,
       error: `${err}`
     });
   }
