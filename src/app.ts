@@ -7,10 +7,15 @@ import { router as bookRouter } from './api/routes/book.route';
 import { router as userRouter } from './api/routes/user.route'
 import { router as sessionRouter } from './api/routes/session.route';
 import deserializeUser from './middleware/deserializeUser';
+import { cloudinaryConfig } from './config/cloudinary';
+import { resolve } from 'path';
+//import multer from 'multer';
 
 dotenv.config();
 
 const app: Express = express();
+
+//const upload = multer();
 
 app.use(morgan('dev'));
 app.use(express.urlencoded({
@@ -18,7 +23,14 @@ app.use(express.urlencoded({
 }));
 app.use(express.json());
 
+// for parsing and fixing multipart/form-data error (postman)
+//app.use(upload.any());
+
+// app.use(express.static(resolve(__dirname, 'src/public')));
+
 //app.use(cors({ origin: `http://localhost:${process.env.CLIENT_PORT}` }));
+
+app.use('*', cloudinaryConfig);
 
 // Ensures deserializeUser middleware is called on every single route
 app.use(deserializeUser);

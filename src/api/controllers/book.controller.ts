@@ -12,6 +12,8 @@ import {
 } from '../services/book.service';
 import dotenv from 'dotenv';
 import { CreateBookInput, DeleteBookInput, GetOneBookInput } from '../../middleware/schema/book.schema';
+import { dataUri } from '../../middleware/multer';
+import { uploader } from '../../config/cloudinary';
 
 dotenv.config();
 
@@ -47,23 +49,39 @@ export const getBooksController = async (req: Request, res: Response) => {
 export const createBookController = async (req: Request<{}, {}, CreateBookInput['body']>, res: Response) => {
   try {
     const userId = res.locals.user._id;
-    const body = req.body;
-    const doc = await createBookService({ ...body, user: userId });
-    return res.status(201).json({
-      message: `New ${bookItem} created successfully!`,
-      book: {
-        _id: doc._id,
-        title: doc.title,
-        description: doc.description,
-        pdf: doc.pdf,
-        user: doc.user,
-        request: {
-          type: 'GET',
-          url: `${process.env.LOCALHOST_URL}/${routeName}/${doc._id}`,
-          description: 'Get this single product by ID at the above url'
+
+    if (req.file) {
+      console.log('file: ', req.file);
+      const file = dataUri(req).content as string;
+      return uploader.upload(file).then(async (result) => {
+        const pdf = result.url;
+        const body = { pdf, ...req.body };
+        console.log('body: ', body);
+        //-----------------------------------------------------
+        const doc = await createBookService({ ...body, user: userId });
+        return res.status(201).json({
+          message: `New ${bookItem} created successfully!`,
+          book: {
+            _id: doc._id,
+            title: doc.title,
+            description: doc.description,
+            pdf: doc.pdf,
+            user: doc.user,
+            request: {
+              type: 'GET',
+              url: `${process.env.LOCALHOST_URL}/${routeName}/${doc._id}`,
+              description: 'Get this single product by ID at the above url'
+            }
+          }
+        });
+        //-----------------------------------------------------
+      }).catch((err) => res.status(400).json({
+        message: 'something went wrong while processing your request',
+        data: {
+          err
         }
-      }
-    });
+      }));
+    }
   } catch (err) {
     res.status(409).json({
       error: `${err}`

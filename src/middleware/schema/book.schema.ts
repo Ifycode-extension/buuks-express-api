@@ -10,9 +10,9 @@ const payload = {
     description: string({
       required_error: 'Description is required'
     }).min(10, 'Description should be at least 10 characters long'),
-    pdf: string({
-      required_error: 'PDF is required'
-    }),
+    // pdf: string({
+    //   required_error: 'PDF is required'
+    // }),
   }),
 }
 
