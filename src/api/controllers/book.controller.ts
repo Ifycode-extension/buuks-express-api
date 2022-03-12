@@ -5,7 +5,7 @@ import {
   Response
 } from 'express';
 import {
-  getBooks,
+  getBooksService,
   createBookService,
   getOneBookService,
   deleteBookService
@@ -18,9 +18,9 @@ dotenv.config();
 let bookItem: string = 'book';
 let routeName: string = `${bookItem}s`;
 
-export const getBooksHandler = async (req: Request, res: Response) => {
+export const getBooksController = async (req: Request, res: Response) => {
   try {
-    let docs = await getBooks();
+    let docs = await getBooksService();
     const response = {
       count: docs.length,
       books: docs.map(doc => {

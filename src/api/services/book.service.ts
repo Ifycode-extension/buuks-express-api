@@ -2,7 +2,7 @@ import mongoose from 'mongoose';
 import { DocumentDefinition, FilterQuery, QueryOptions } from 'mongoose';
 import { BookDocument, BookModel as Book } from '../models/book.model';
 
-export const getBooks = async () => {
+export const getBooksService = async () => {
   const query = await Book.find().select('_id title description').exec();
   return query;
 }
