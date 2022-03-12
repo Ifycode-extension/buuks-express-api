@@ -32,5 +32,10 @@ export const getOneBookSchema = object({
   ...params
 });
 
+export const deleteBookSchema = object({
+  ...params
+});
+
 export type CreateBookInput = TypeOf<typeof createBookSchema>;
 export type GetOneBookInput = TypeOf<typeof getOneBookSchema>;
+export type DeleteBookInput = TypeOf<typeof deleteBookSchema>;

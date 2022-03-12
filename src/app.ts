@@ -25,9 +25,9 @@ app.use(deserializeUser);
 
 //======== Routes ==========
 app.use('/', appRouter);
-app.use('/books', bookRouter);
 app.use('/users', userRouter);
 app.use('/sessions', sessionRouter);
+app.use('/books', bookRouter);
 //==========================
 
 interface Error {

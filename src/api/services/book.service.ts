@@ -1,3 +1,4 @@
+import mongoose from 'mongoose';
 import { DocumentDefinition, FilterQuery, QueryOptions } from 'mongoose';
 import { BookDocument, BookModel as Book } from '../models/book.model';
 
@@ -12,11 +13,11 @@ export const createBookService = async (input: DocumentDefinition<Omit<BookDocum
 }
 
 export const getOneBookService = async (query: FilterQuery<BookDocument>, options: QueryOptions = { lean: true }) => {
-  const findone = Book.findOne(query, {}, options);
-  return findone;
+  const findbyid = Book.findById(query, {}, options);
+  return findbyid;
 }
 
-export const deleteBook = async (paramsId: string) => {
-  const query = await Book.deleteOne({ _id: paramsId }).exec();
-  return query;
+export const deleteBookService = async (query: FilterQuery<BookDocument>) => {
+  const deleteone = await Book.deleteOne(query);
+  return deleteone;
 }

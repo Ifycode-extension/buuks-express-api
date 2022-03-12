@@ -1,3 +1,4 @@
+import mongoose from 'mongoose';
 import {
   NextFunction,
   Request,
@@ -7,10 +8,10 @@ import {
   getBooks,
   createBookService,
   getOneBookService,
-  deleteBook
+  deleteBookService
 } from '../services/book.service';
 import dotenv from 'dotenv';
-import { CreateBookInput, GetOneBookInput } from '../../middleware/schema/book.schema';
+import { CreateBookInput, DeleteBookInput, GetOneBookInput } from '../../middleware/schema/book.schema';
 
 dotenv.config();
 
@@ -72,8 +73,8 @@ export const createBookController = async (req: Request<{}, {}, CreateBookInput[
 
 export const getOneBookController = async (req: Request<GetOneBookInput['params']>, res: Response, next: NextFunction) => {
   try {
-    const bookId = req.params.bookId;
-    const doc = await getOneBookService({ bookId });
+    const bookId = new mongoose.Types.ObjectId(req.params.bookId);
+    const doc = await getOneBookService(bookId);
     if (doc) {
       return res.status(200).json({
         _id: doc._id,
@@ -100,19 +101,30 @@ export const getOneBookController = async (req: Request<GetOneBookInput['params'
   }
 }
 
-export const deleteBookHandler = async (req: Request, res: Response, next: NextFunction) => {
+export const deleteBookController = async (req: Request<DeleteBookInput['params']>, res: Response, next: NextFunction) => {
   try {
-    let doc = await deleteBook(req.params.bookId);
+    const userId = res.locals.user._id;
+    const bookId = new mongoose.Types.ObjectId(req.params.bookId);
+    const book = await getOneBookService(bookId);
+
+    if (!book) {
+      return res.status(404).json({
+        message: 'No record found for provided ID'
+      });
+    }
+
+    if (book.user.toString() !== userId) {
+      return res.sendStatus(403);
+    }
+
+    await deleteBookService({ bookId });
+
     res.status(200).json({
       message: `${bookItem} deleted successfully!`,
       request: {
         type: 'POST',
-        description: 'Url link to make post request to',
-        url: `${process.env.LOCALHOST_URL}/${routeName}/`,
-        body: {
-          title: 'String',
-          description: 'String'
-        }
+        url: `${process.env.LOCALHOST_URL}/${routeName}`,
+        description: 'Create a new product at the above url'
       }
     });
   } catch (err) {
