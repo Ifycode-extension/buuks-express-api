@@ -55,6 +55,41 @@
 }
 ````
 
+## GET /auth/sessions
+````
+No response body
+````
+
+**Example response**
+````
+[
+    {
+        "_id": "string",
+        "user": "string",
+        "password": boolean,
+        "userAgent": "string",
+        "createdAt": "string",
+        "updatedAt": "string",
+    },
+    // etc.
+]
+````
+
+## DELETE /auth/sessions
+````
+No response body
+````
+
+**Example response**
+````
+{
+    "accessToken": null,
+    "refreshToken": null
+}
+````
+
+
+
 <!--
 
 ### POST /books
