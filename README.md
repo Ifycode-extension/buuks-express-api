@@ -12,6 +12,7 @@
 |POST /books|Create a new book (authenticated user)|title, description, pdf (file upload)|Use access token from the POST /auth/login response|
 |GET /books/user/:userId|Get/view only books created by a particular user, using the user ID|No request body|No need for access token|
 |GET /books/:bookId|Get/view a book stored in the database, using the book ID|No request body|No need for access token|
+|PUT /books/:bookId|Update already existing book in the database, using the book ID|title, description, pdf (file upload)|Use access token from the POST /auth/login response|
 |DELETE /books/:bookId|Delete a book from the database, using the book ID|No request body|Use access token from the POST /auth/login response|
 
 ## POST /users/signup
@@ -152,6 +153,23 @@ No response body
     "description": "string",
     "pdf": "string",
     "user": "string",
+    "request": {
+        "type": "string",
+        "url": "string",
+        "description": "string"
+    }
+}
+````
+
+### PUT /books/:bookId
+**Request body**
+
+Use form-data (in postman). The **title** and **description** keys should have value of type **string**. The **pdf** key should have the value of type file.
+
+**Successful response (sample)**
+````
+{
+    "message": "string",
     "request": {
         "type": "string",
         "url": "string",
