@@ -148,7 +148,9 @@ export const deleteBookController = async (req: Request<DeleteBookInput['params'
     }
 
     if (book.user.toString() !== userId) {
-      return res.sendStatus(403);
+      return res.status(403).json({
+        error: 'Forbidden'
+      });
     }
 
     await deleteBookService(bookId);

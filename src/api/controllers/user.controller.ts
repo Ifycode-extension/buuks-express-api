@@ -3,7 +3,7 @@ import { omit } from 'lodash';
 import { CreateUserInput } from '../../middleware/schema/user.schema';
 import { createUserService } from '../services/user.service';
 
-export const createUserControllerHandler = async (
+export const createUserController = async (
   req: Request<{}, {}, CreateUserInput['body']>,
   res: Response
 ) => {

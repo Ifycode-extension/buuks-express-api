@@ -3,7 +3,7 @@ import { get } from 'lodash';
 import { reIssueAccessToken } from '../api/services/session.service';
 import { verifyJwt } from '../utils/jwt.utils';
 
-// middleware for adding user to the req.body object in getUserSessionsControllerHandler
+// middleware for adding user to the req.body object in getUserSessionsController
 const deserializeUser = async (req: Request, res: Response, next: NextFunction) => {
 
   // get access token from request headers (also remove the word 'Bearer' at the start of the auth token)
