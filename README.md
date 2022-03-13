@@ -1,7 +1,7 @@
 # Buuks API
 "Buuks" instead of "books"... Another angle 😉 The API allows a user to interact with a database made for storing books. API is able to do the following: CRUD operations for books, User signup, authentication (and basic authorization), PDF file upload to Cloudinary and uses zod for resource validation. More descriptive explanations in the sections below.
 
-## API design and usage
+## API design and description
 
 |Methods & endpoints|Description|Request body|Auth (access token)|
 |--|--|:--:|:--:|
@@ -15,19 +15,25 @@
 |PUT /books/:bookId|Update already existing book in the database, using the book ID|title, description, pdf (file upload)|Use access token from the POST /auth/login response|
 |DELETE /books/:bookId|Delete a book from the database, using the book ID|No request body|Use access token from the POST /auth/login response|
 
-## POST /users/signup
-**Request body**
-````
+## Request body and response breakdown
+
+<details>
+<summary>POST /users/signup</summary>
+<br/>
+    <b>Request body</b>
+    <br/><br/>
+<pre>
 {
     "email": "string",
     "password": "string",
     "passwordConfirmation": "string",
     "name": "string"
 }
-````
-
-**Successful response (sample)**
-````
+</pre>
+<br/>
+     <b>Successful response (sample)</b>
+    <br/><br/>
+<pre>
 {
     "email": "string",
     "name": "string",
@@ -35,33 +41,47 @@
     "createdAt": "string",
     "updatedAt": "string"
 }
-````
+</pre>
+</details>
 
+##
 
-## POST /auth/login
-**Request body**
-````
+<details>
+<summary>POST /auth/login</summary>
+<br/>
+    <b>Request body</b>
+    <br/><br/>
+<pre>
 {
     "email": "string",
     "password": "string"
 }
-````
-
-**Successful response (sample)**
-````
+</pre>
+<br/>
+     <b>Successful response (sample)</b>
+    <br/><br/>
+<pre>
 {
     "accessToken": "string",
     "refreshToken": "string"
 }
-````
+</pre>
+</details>
 
-## GET /auth/sessions
-````
+##
+
+<details>
+<summary>GET /auth/sessions</summary>
+<br/>
+    <b>Request body</b>
+    <br/><br/>
+<pre>
 No response body
-````
-
-**Successful response (sample)**
-````
+</pre>
+<br/>
+     <b>Successful response (sample)</b>
+    <br/><br/>
+<pre>
 [
     {
         "_id": "string",
@@ -73,20 +93,49 @@ No response body
     },
     // etc.
 ]
-````
+</pre>
+</details>
 
-## DELETE /auth/sessions
-````
+##
+
+<details>
+<summary>DELETE /auth/sessions</summary>
+<br/>
+    <b>Request body</b>
+    <br/><br/>
+<pre>
 No response body
-````
-
-**Successful response (sample)**
-````
+</pre>
+<br/>
+     <b>Successful response (sample)</b>
+    <br/><br/>
+<pre>
 {
     "accessToken": null,
     "refreshToken": null
 }
-````
+</pre>
+</details>
+
+
+<!--
+
+<details>
+<summary>How do I dropdown?</summary>
+<br>
+This is how you dropdown.
+<br><br>
+<pre>
+&lt;details&gt;
+&lt;summary&gt;How do I dropdown?&lt;&#47;summary&gt;
+&lt;br&gt;
+This is how you dropdown.
+&lt;&#47;details&gt;
+</pre>
+</details>
+
+-->
+
 
 ### POST /books
 **Request body**
