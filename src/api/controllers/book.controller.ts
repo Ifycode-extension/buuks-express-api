@@ -156,6 +156,7 @@ export const updateBookController = async (req: Request<UpdateBookInput['params'
 
     if (book.user.toString() !== userId) {
       return res.status(403).json({
+        message: 'Please sign in to your account to continue',
         error: 'Forbidden'
       });
     }
@@ -192,6 +193,7 @@ export const deleteBookController = async (req: Request<DeleteBookInput['params'
 
     if (book.user.toString() !== userId) {
       return res.status(403).json({
+        message: 'Please sign in to your account to continue',
         error: 'Forbidden'
       });
     }
