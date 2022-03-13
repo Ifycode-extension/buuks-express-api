@@ -139,4 +139,43 @@ No response body
 }
 ````
 
+## GET /books/:bookId
+
+````
+No response body
+````
+
+**Example response**
+````
+{
+    "_id": "string",
+    "title": "string",
+    "description": "string",
+    "pdf": "string",
+    "user": "string",
+    "request": {
+        "type": "string",
+        "url": "string",
+        "description": "string"
+    }
+}
+````
+
+## DELETE /books/:bookId
+
+````
+No response body
+````
+
+**Example response**
+````
+{
+    "message": "string",
+    "request": {
+        "type": "string",
+        "url": "string",
+        "description": "string"
+    }
+}
+````
 
