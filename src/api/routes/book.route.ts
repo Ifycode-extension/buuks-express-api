@@ -1,5 +1,6 @@
 import express, { IRouter } from 'express';
 import { multerUploadsMiddleware } from '../../middleware/multer';
+import requireUser from '../../middleware/requireUser';
 import {
   createBookSchema,
   deleteBookSchema,
@@ -19,6 +20,7 @@ import {
 let router: IRouter = express.Router();
 
 router.post('/',
+  requireUser,
   multerUploadsMiddleware,
   validateResource(createBookSchema),
   validateResource(uploadBookSchema),
@@ -28,10 +30,15 @@ router.get('/user/:userId', getBooksForEachUserController);
 router.get('/:bookId', validateResource(getOneBookSchema), getOneBookController);
 router.put('/:bookId',
   multerUploadsMiddleware,
+  requireUser,
   validateResource(updateBookSchema),
   validateResource(uploadBookSchema),
   updateBookController
 );
-router.delete('/:bookId', validateResource(deleteBookSchema), deleteBookController);
+router.delete('/:bookId',
+  requireUser,
+  validateResource(deleteBookSchema),
+  deleteBookController
+);
 
 export { router };
