@@ -48,7 +48,7 @@ export const getBooksForEachUserController = async (req: Request, res: Response,
             request: {
               type: 'GET',
               url: `${process.env.LOCALHOST_URL}/${routeName}/${doc._id}`,
-              description: 'Get this single product by ID at the above url'
+              description: `Get this single ${bookItem} by ID at the above url`
             }
           }
         })
@@ -93,7 +93,7 @@ export const createBookController = async (req: Request<CreateBookInput['body'],
             request: {
               type: 'GET',
               url: `${process.env.LOCALHOST_URL}/${routeName}/${doc._id}`,
-              description: 'Get this single product by ID at the above url'
+              description: `Get this single ${bookItem} by ID at the above url`
             }
           }
         });
@@ -167,7 +167,7 @@ export const updateBookController = async (req: Request<UpdateBookInput['params'
       request: {
         type: 'GET',
         url: `${process.env.LOCALHOST_URL}/${routeName}/${bookId.toString()}`,
-        description: 'Get this single product by ID at the above url'
+        description: `Get this single ${bookItem} by ID at the above url`
       }
     });
   } catch (err) {
@@ -203,7 +203,7 @@ export const deleteBookController = async (req: Request<DeleteBookInput['params'
       request: {
         type: 'POST',
         url: `${process.env.LOCALHOST_URL}/${routeName}`,
-        description: 'Create a new product at the above url'
+        description: `Create a new ${bookItem} at the above url`
       }
     });
   } catch (err) {
