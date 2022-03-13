@@ -5,6 +5,6 @@ import { createUserControllerHandler } from '../controllers/user.controller';
 
 let router: IRouter = express.Router();
 
-router.post('/', validateResource(createUserSchema), createUserControllerHandler);
+router.post('/signup', validateResource(createUserSchema), createUserControllerHandler);
 
 export { router };

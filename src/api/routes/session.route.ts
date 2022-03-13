@@ -1,7 +1,7 @@
 import express, { IRouter } from 'express';
+import validateResource from '../../middleware/validate';
 import requireUser from '../../middleware/requireUser';
 import { createSessionSchema } from '../../middleware/schema/session.schema';
-import validateResource from '../../middleware/validate';
 import {
   createSessionControllerHandler,
   deleteUserSessionControllerHandler,
@@ -10,8 +10,8 @@ import {
 
 let router: IRouter = express.Router();
 
-router.post('/', validateResource(createSessionSchema), createSessionControllerHandler);
-router.get('/', requireUser, getUserSessionsControllerHandler);
-router.delete('/', requireUser, deleteUserSessionControllerHandler);
+router.post('/login', validateResource(createSessionSchema), createSessionControllerHandler);
+router.get('/sessions', requireUser, getUserSessionsControllerHandler);
+router.delete('/sessions', requireUser, deleteUserSessionControllerHandler);
 
 export { router };

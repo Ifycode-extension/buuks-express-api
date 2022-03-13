@@ -3,9 +3,9 @@ import dotenv from 'dotenv';
 import morgan from 'morgan';
 // import cors from 'cors';
 import { router as appRouter } from './api/routes/app.route';
-import { router as bookRouter } from './api/routes/book.route';
-import { router as userRouter } from './api/routes/user.route'
+import { router as userRoute } from './api/routes/user.route';
 import { router as sessionRouter } from './api/routes/session.route';
+import { router as bookRouter } from './api/routes/book.route';
 import deserializeUser from './middleware/deserializeUser';
 import { cloudinaryConfig } from './config/cloudinary';
 
@@ -26,10 +26,10 @@ app.use('*', cloudinaryConfig);
 // Ensures deserializeUser middleware is called on every single route
 app.use(deserializeUser);
 
-//======== Routes ==========
+//==== endpoint routers ====
 app.use('/', appRouter);
-app.use('/users', userRouter);
-app.use('/sessions', sessionRouter);
+app.use('/users', userRoute);
+app.use('/auth', sessionRouter);
 app.use('/books', bookRouter);
 //==========================
 
