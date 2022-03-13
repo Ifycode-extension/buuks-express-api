@@ -7,7 +7,7 @@ import {
 } from '../services/session.service';
 import { validatePasswordService } from '../services/user.service';
 
-export const createSessionControllerHandler = async (req: Request, res: Response) => {
+export const createSessionController = async (req: Request, res: Response) => {
   // validate the user's password
   const user = await validatePasswordService(req.body);
 
@@ -47,7 +47,7 @@ export const createSessionControllerHandler = async (req: Request, res: Response
   }
 }
 
-export const getUserSessionsControllerHandler = async (req: Request, res: Response) => {
+export const getUserSessionsController = async (req: Request, res: Response) => {
   const userId = res.locals.user._id;
   // console.log('userId: ', userId);
   const sessions = await getUserSessionsService({ user: userId, valid: true });
@@ -55,7 +55,7 @@ export const getUserSessionsControllerHandler = async (req: Request, res: Respon
   return res.status(200).json(sessions);
 }
 
-export const deleteUserSessionControllerHandler = async (req: Request, res: Response) => {
+export const deleteUserSessionController = async (req: Request, res: Response) => {
 
   const sessionId = res.locals.user.session;
 

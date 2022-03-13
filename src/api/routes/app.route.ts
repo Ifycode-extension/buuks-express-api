@@ -1,8 +1,8 @@
 import express, { IRouter } from 'express';
-import { getAppHandler } from '../controllers/app.controller';
+import { getAppController } from '../controllers/app.controller';
 
 let router: IRouter = express.Router();
 
-router.get('/', getAppHandler);
+router.get('/', getAppController);
 
 export { router };
