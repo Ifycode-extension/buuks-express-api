@@ -47,7 +47,7 @@ export const getBooksForEachUserController = async (req: Request, res: Response,
             pdf: doc.pdf,
             request: {
               type: 'GET',
-              url: `${process.env.LOCALHOST_URL}/${routeName}/${doc._id}`,
+              url: `${process.env.API_HOST_URL}/${routeName}/${doc._id}`,
               description: `Get this single ${bookItem} by ID at the above url`
             }
           }
@@ -92,7 +92,7 @@ export const createBookController = async (req: Request<CreateBookInput['body'],
             user: doc.user,
             request: {
               type: 'GET',
-              url: `${process.env.LOCALHOST_URL}/${routeName}/${doc._id}`,
+              url: `${process.env.API_HOST_URL}/${routeName}/${doc._id}`,
               description: `Get this single ${bookItem} by ID at the above url`
             }
           }
@@ -125,7 +125,7 @@ export const getOneBookController = async (req: Request<GetOneBookInput['params'
         user: doc.user,
         request: {
           type: 'GET',
-          url: `${process.env.LOCALHOST_URL}/${routeName}`,
+          url: `${process.env.API_HOST_URL}/${routeName}`,
           description: `Get the list of all ${bookItem}s for this user at the above url`,
         }
       });
@@ -178,7 +178,7 @@ export const updateBookController = async (req: Request<UpdateBookInput['params'
           message: `${bookItem} updated successfully!`,
           request: {
             type: 'GET',
-            url: `${process.env.LOCALHOST_URL}/${routeName}/${bookId.toString()}`,
+            url: `${process.env.API_HOST_URL}/${routeName}/${bookId.toString()}`,
             description: `Get this single ${bookItem} by ID at the above url`
           }
         });
@@ -223,7 +223,7 @@ export const deleteBookController = async (req: Request<DeleteBookInput['params'
       message: `${bookItem} deleted successfully!`,
       request: {
         type: 'POST',
-        url: `${process.env.LOCALHOST_URL}/${routeName}`,
+        url: `${process.env.API_HOST_URL}/${routeName}`,
         description: `Create a new ${bookItem} at the above url`
       }
     });
