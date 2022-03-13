@@ -24,8 +24,8 @@ const deserializeUser = async (req: Request, res: Response, next: NextFunction) 
     return next();
   }
 
-  console.log('expired: ', expired);
-  console.log('refreshToken: ', refreshToken);
+  // console.log('expired: ', expired);
+  // console.log('refreshToken: ', refreshToken);
 
   // if access token is exprired and there's refresh token, reissue an access token
   if (expired && refreshToken) {

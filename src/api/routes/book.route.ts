@@ -1,7 +1,11 @@
 import express, { IRouter } from 'express';
-import multer from 'multer';
 import { multerUploadsMiddleware } from '../../middleware/multer';
-import { createBookSchema, deleteBookSchema, getOneBookSchema, uploadBookSchema } from '../../middleware/schema/book.schema';
+import {
+  createBookSchema,
+  deleteBookSchema,
+  getOneBookSchema,
+  uploadBookSchema
+} from '../../middleware/schema/book.schema';
 import validateResource from '../../middleware/validate';
 import {
   getBooksController,
@@ -11,24 +15,16 @@ import {
 } from '../controllers/book.controller';
 
 let router: IRouter = express.Router();
-const upload = multer();
 
 router.get('/', getBooksController);
 
 router.post('/',
   multerUploadsMiddleware,
   validateResource(createBookSchema),
-  validateResource(uploadBookSchema), //upload.any(), // (just testing with .any() in case it works)
+  validateResource(uploadBookSchema),
   createBookController
 );
 router.get('/:bookId', validateResource(getOneBookSchema), getOneBookController);
 router.delete('/:bookId', validateResource(deleteBookSchema), deleteBookController);
 
 export { router };
-
-
-// test upload to cloudinary with this any time POST /books fails again
-// router.post('/file',
-//   multerUploadsMiddleware,
-//   createBookController
-// );
