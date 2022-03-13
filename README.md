@@ -25,7 +25,7 @@
 }
 ````
 
-**Example response**
+**Successful response (sample)**
 ````
 {
     "email": "string",
@@ -46,7 +46,7 @@
 }
 ````
 
-**Example response**
+**Successful response (sample)**
 ````
 {
     "accessToken": "string",
@@ -59,7 +59,7 @@
 No response body
 ````
 
-**Example response**
+**Successful response (sample)**
 ````
 [
     {
@@ -79,7 +79,7 @@ No response body
 No response body
 ````
 
-**Example response**
+**Successful response (sample)**
 ````
 {
     "accessToken": null,
@@ -92,7 +92,7 @@ No response body
 
 Use form-data (in postman). The **title** and **description** keys should have value of type **string**. The **pdf** key should have the value of type file.
 
-**Example response**
+**Successful response (sample)**
 ````
 {
     "message": "string",
@@ -116,7 +116,7 @@ Use form-data (in postman). The **title** and **description** keys should have v
 No response body
 ````
 
-**Example response**
+**Successful response (sample)**
 ````
 {
     "count": number,
@@ -144,7 +144,7 @@ No response body
 No response body
 ````
 
-**Example response**
+**Successful response (sample)**
 ````
 {
     "_id": "string",
@@ -166,7 +166,7 @@ No response body
 No response body
 ````
 
-**Example response**
+**Successful response (sample)**
 ````
 {
     "message": "string",
