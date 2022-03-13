@@ -178,3 +178,9 @@ No response body
 }
 ````
 
+## Helpful learning (and bug fixing) resources
+- [TomDoesTech's youtube video: REST API with Node.js, Express, TypeScript, MongoDB & Zod](https://www.youtube.com/watch?v=BWUi6BS9T5Y)
+- [Academind's youtube playlist: Building a RESTful API with Node.js](https://youtube.com/playlist?list=PL55RiY5tL51q4D-B63KBnygU6opNPFk_q)
+- [Okpukoro Joe's Article: Uploading Images to Cloudinary Using Multer and ExpressJS](https://medium.com/@joeokpus/uploading-images-to-cloudinary-using-multer-and-expressjs-f0b9a4e14c54)
+- [Yilmaz's stackoverflow answer to multer/clouudinary issue: Converting image to base64 with data-uri with typescript](https://stackoverflow.com/a/67904206/15012852)
+- [JWT doc: Introduction to JSON Web Tokens](https://jwt.io/introduction)
