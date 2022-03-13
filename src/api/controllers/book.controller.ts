@@ -70,7 +70,8 @@ export const createBookController = async (req: Request<CreateBookInput['body'],
   try {
     const userId = res.locals.user._id;
 
-    // TODO: extract this cloudinary upload code to a separate service
+    // TODO: extract any cloudinary upload code to a separate service for reuse, and just call the service when needed
+    // TODO: create and/or specify separate folder to upload PDF to on cloudinary (per user)
     if (req.file) {
       // console.log('file: ', req.file);
       const file = dataUri(req).content as string;
@@ -161,8 +162,7 @@ export const updateBookController = async (req: Request<UpdateBookInput['params'
       });
     }
 
-    // TODO: extract this cloudinary upload code to a separate service
-    // TODO: update should replace the previous PDF file attached to this book id
+    // TODO: Not only in DB. On Cloudinary, update should replace the previous PDF file attached to this book id
     if (req.file) {
       // console.log('file: ', req.file);
       const file = dataUri(req).content as string;
@@ -216,6 +216,8 @@ export const deleteBookController = async (req: Request<DeleteBookInput['params'
         error: 'Forbidden'
       });
     }
+
+    // TODO: Not only in DB. On Cloudinary, delete PDF file attached to this book id
 
     await deleteBookService(bookId);
 
