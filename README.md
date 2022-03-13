@@ -88,16 +88,55 @@ No response body
 }
 ````
 
-
-
-<!--
-
 ### POST /books
-Request body:
+**Request body**
+
+Use form-data (in postman). The **title** and **description** keys should have value of type **string**. The **pdf** key should have the value of type file.
+
+**Example response**
 ````
 {
-    "title": "string",
-    "description": "string"
+    "message": "string",
+    "book": {
+        "_id": "string",
+        "title": "string",
+        "description": "string",
+        "pdf": "string",
+        "user": "string",
+        "request": {
+            "type": "string",
+            "url": "string",
+            "description": "string"
+        }
+    }
 }
 ````
--->
+
+## GET /books/user/:userId
+````
+No response body
+````
+
+**Example response**
+````
+{
+    "count": number,
+    "description": "string",
+    "books": [
+        {
+            "_id": "string",
+            "title": "string",
+            "description": "string",
+            "pdf": "string",
+            "request": {
+                "type": "string",
+                "url": "string",
+                "description": "string"
+            }
+        },
+        // etc.
+    ]
+}
+````
+
+
