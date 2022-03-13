@@ -1,7 +1,8 @@
 # Buuks API
 "Buuks" instead of "books"... Another angle 😉 The API allows a user to interact with a database made for storing books. API is able to do the following: CRUD operations for books, User signup, authentication (and basic authorization), PDF file upload to Cloudinary and uses zod for resource validation. More descriptive explanations in the sections below.
+<br/>
 
-## API design and description
+## API design
 
 |Methods & endpoints|Description|Request body|Auth (access token)|
 |--|--|:--:|:--:|
@@ -14,6 +15,7 @@
 |GET /books/:bookId|Get/view a book stored in the database, using the book ID|No request body|No need for access token|
 |PUT /books/:bookId|Update already existing book in the database, using the book ID|title, description, pdf (file upload)|Use access token from the POST /auth/login response|
 |DELETE /books/:bookId|Delete a book from the database, using the book ID|No request body|Use access token from the POST /auth/login response|
+<br/>
 
 ## Request body and response breakdown
 
@@ -117,33 +119,18 @@ No response body
 </pre>
 </details>
 
-
-<!--
+##
 
 <details>
-<summary>How do I dropdown?</summary>
-<br>
-This is how you dropdown.
-<br><br>
+<summary>POST /books</summary>
+<br/>
+    <b>Request body</b>
+    <br/><br/>
+    Use form-data (in postman). The <b>title</b> and <b>description</b> keys should have value of type <b>string</b>. The <b>pdf</b> key should have the value of type file.
+<br/><br/>
+     <b>Successful response (sample)</b>
+    <br/><br/>
 <pre>
-&lt;details&gt;
-&lt;summary&gt;How do I dropdown?&lt;&#47;summary&gt;
-&lt;br&gt;
-This is how you dropdown.
-&lt;&#47;details&gt;
-</pre>
-</details>
-
--->
-
-
-### POST /books
-**Request body**
-
-Use form-data (in postman). The **title** and **description** keys should have value of type **string**. The **pdf** key should have the value of type file.
-
-**Successful response (sample)**
-````
 {
     "message": "string",
     "book": {
@@ -159,15 +146,23 @@ Use form-data (in postman). The **title** and **description** keys should have v
         }
     }
 }
-````
+</pre>
+</details>
 
-## GET /books/user/:userId
-````
+##
+
+<details>
+<summary>GET /books/user/:userId</summary>
+<br/>
+    <b>Request body</b>
+    <br/><br/>
+<pre>
 No response body
-````
-
-**Successful response (sample)**
-````
+</pre>
+<br/>
+     <b>Successful response (sample)</b>
+    <br/><br/>
+<pre>
 {
     "count": number,
     "description": "string",
@@ -186,16 +181,23 @@ No response body
         // etc.
     ]
 }
-````
+</pre>
+</details>
 
-## GET /books/:bookId
+##
 
-````
+<details>
+<summary>GET /books/:bookId</summary>
+<br/>
+    <b>Request body</b>
+    <br/><br/>
+<pre>
 No response body
-````
-
-**Successful response (sample)**
-````
+</pre>
+<br/>
+     <b>Successful response (sample)</b>
+    <br/><br/>
+<pre>
 {
     "_id": "string",
     "title": "string",
@@ -208,15 +210,22 @@ No response body
         "description": "string"
     }
 }
-````
+</pre>
+</details>
 
-### PUT /books/:bookId
-**Request body**
 
-Use form-data (in postman). The **title** and **description** keys should have value of type **string**. The **pdf** key should have the value of type file.
+##
 
-**Successful response (sample)**
-````
+<details>
+<summary>PUT /books/:bookId</summary>
+<br/>
+    <b>Request body</b>
+    <br/><br/>
+    Use form-data (in postman). The <b>title</b> and <b>description</b> keys should have value of type <b>string</b>. The <b>pdf</b> key should have the value of type file.
+<br/><br/>
+     <b>Successful response (sample)</b>
+    <br/><br/>
+<pre>
 {
     "message": "string",
     "request": {
@@ -225,16 +234,24 @@ Use form-data (in postman). The **title** and **description** keys should have v
         "description": "string"
     }
 }
-````
+</pre>
+</details>
 
-## DELETE /books/:bookId
 
-````
+##
+
+<details>
+<summary>DELETE /books/:bookId</summary>
+<br/>
+    <b>Request body</b>
+    <br/><br/>
+<pre>
 No response body
-````
-
-**Successful response (sample)**
-````
+</pre>
+<br/>
+     <b>Successful response (sample)</b>
+    <br/><br/>
+<pre>
 {
     "message": "string",
     "request": {
@@ -243,7 +260,9 @@ No response body
         "description": "string"
     }
 }
-````
+</pre>
+</details>
+<br/>
 
 ## Helpful learning (and bug fixing) resources
 - [TomDoesTech's youtube video: REST API with Node.js, Express, TypeScript, MongoDB & Zod](https://www.youtube.com/watch?v=BWUi6BS9T5Y)
