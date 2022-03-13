@@ -47,6 +47,12 @@ export const getOneBookSchema = object({
   ...params
 });
 
+export const updateBookSchema = object({
+  ...payload,
+  ...file_payload,
+  ...params
+});
+
 export const deleteBookSchema = object({
   ...params
 });
@@ -54,4 +60,5 @@ export const deleteBookSchema = object({
 export type CreateBookInput = TypeOf<typeof createBookSchema>;
 export type UploadBookInput = TypeOf<typeof uploadBookSchema>;
 export type GetOneBookInput = TypeOf<typeof getOneBookSchema>;
+export type UpdateBookInput = TypeOf<typeof updateBookSchema>;
 export type DeleteBookInput = TypeOf<typeof deleteBookSchema>;

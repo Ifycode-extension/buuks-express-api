@@ -9,10 +9,17 @@ import {
   createBookService,
   getOneBookService,
   deleteBookService,
-  getUserByIdService
+  getUserByIdService,
+  updateBookservice
 } from '../services/book.service';
 import dotenv from 'dotenv';
-import { CreateBookInput, DeleteBookInput, GetOneBookInput, UploadBookInput } from '../../middleware/schema/book.schema';
+import {
+  CreateBookInput,
+  DeleteBookInput,
+  GetOneBookInput,
+  UpdateBookInput,
+  UploadBookInput
+} from '../../middleware/schema/book.schema';
 import { dataUri } from '../../middleware/multer';
 import { uploader } from '../../config/cloudinary';
 
@@ -130,6 +137,42 @@ export const getOneBookController = async (req: Request<GetOneBookInput['params'
   } catch (err) {
     return res.status(500).json({
       message: 'Invalid ID',
+      error: `${err}`
+    });
+  }
+}
+
+export const updateBookController = async (req: Request<UpdateBookInput['params'], UploadBookInput['file']>, res: Response) => {
+  try {
+    const userId = res.locals.user._id;
+    const bookId = new mongoose.Types.ObjectId(req.params.bookId);
+    const book = await getOneBookService(bookId);
+
+    if (!book) {
+      return res.status(404).json({
+        message: 'No record found for provided ID'
+      });
+    }
+
+    if (book.user.toString() !== userId) {
+      return res.status(403).json({
+        error: 'Forbidden'
+      });
+    }
+
+    await updateBookservice(bookId, req.body, { new: true });
+
+    res.status(200).json({
+      message: `${bookItem} updated successfully!`,
+      request: {
+        type: 'GET',
+        url: `${process.env.LOCALHOST_URL}/${routeName}/${bookId.toString()}`,
+        description: 'Get this single product by ID at the above url'
+      }
+    });
+  } catch (err) {
+    res.status(500).json({
+      message: `Error updating ${bookItem}`,
       error: `${err}`
     });
   }
