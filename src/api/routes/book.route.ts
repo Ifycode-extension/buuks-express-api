@@ -1,7 +1,7 @@
 import express, { IRouter } from 'express';
 import multer from 'multer';
 import { multerUploadsMiddleware } from '../../middleware/multer';
-import { createBookSchema, deleteBookSchema, getOneBookSchema } from '../../middleware/schema/book.schema';
+import { createBookSchema, deleteBookSchema, getOneBookSchema, uploadBookSchema } from '../../middleware/schema/book.schema';
 import validateResource from '../../middleware/validate';
 import {
   getBooksController,
@@ -17,7 +17,8 @@ router.get('/', getBooksController);
 
 router.post('/',
   multerUploadsMiddleware,
-  validateResource(createBookSchema), //upload.any(), // (just testing with .any() in case it works)
+  validateResource(createBookSchema),
+  validateResource(uploadBookSchema), //upload.any(), // (just testing with .any() in case it works)
   createBookController
 );
 router.get('/:bookId', validateResource(getOneBookSchema), getOneBookController);

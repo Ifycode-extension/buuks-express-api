@@ -11,7 +11,7 @@ import {
   deleteBookService
 } from '../services/book.service';
 import dotenv from 'dotenv';
-import { CreateBookInput, DeleteBookInput, GetOneBookInput } from '../../middleware/schema/book.schema';
+import { CreateBookInput, DeleteBookInput, GetOneBookInput, UploadBookInput } from '../../middleware/schema/book.schema';
 import { dataUri } from '../../middleware/multer';
 import { uploader } from '../../config/cloudinary';
 
@@ -46,17 +46,19 @@ export const getBooksController = async (req: Request, res: Response) => {
   }
 }
 
-export const createBookController = async (req: Request<{}, {}, CreateBookInput['body']>, res: Response) => {
+export const createBookController = async (req: Request<CreateBookInput['body'], UploadBookInput['file']>, res: Response) => {
   try {
     const userId = res.locals.user._id;
 
     if (req.file) {
       console.log('file: ', req.file);
       const file = dataUri(req).content as string;
+      // console.log(file)
       return uploader.upload(file).then(async (result) => {
+        // console.log(result)
         const pdf = result.url;
         const body = { pdf, ...req.body };
-        console.log('body: ', body);
+        // console.log('body: ', body);
         //-----------------------------------------------------
         const doc = await createBookService({ ...body, user: userId });
         return res.status(201).json({
