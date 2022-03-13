@@ -7,6 +7,7 @@ import { router as bookRouter } from './api/routes/book.route';
 import { router as userRouter } from './api/routes/user.route'
 import { router as sessionRouter } from './api/routes/session.route';
 import deserializeUser from './middleware/deserializeUser';
+import { cloudinaryConfig } from './config/cloudinary';
 
 dotenv.config();
 
@@ -19,6 +20,8 @@ app.use(express.urlencoded({
 app.use(express.json());
 
 //app.use(cors({ origin: `http://localhost:${process.env.CLIENT_PORT}` }));
+
+app.use('*', cloudinaryConfig);
 
 // Ensures deserializeUser middleware is called on every single route
 app.use(deserializeUser);
