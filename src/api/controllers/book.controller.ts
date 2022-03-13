@@ -8,7 +8,8 @@ import {
   getBooksService,
   createBookService,
   getOneBookService,
-  deleteBookService
+  deleteBookService,
+  getUserByIdService
 } from '../services/book.service';
 import dotenv from 'dotenv';
 import { CreateBookInput, DeleteBookInput, GetOneBookInput, UploadBookInput } from '../../middleware/schema/book.schema';
@@ -20,27 +21,39 @@ dotenv.config();
 let bookItem: string = 'book';
 let routeName: string = `${bookItem}s`;
 
-export const getBooksController = async (req: Request, res: Response) => {
+export const getBooksForEachUserController = async (req: Request, res: Response, next: NextFunction) => {
+
   try {
-    let docs = await getBooksService();
-    const response = {
-      count: docs.length,
-      books: docs.map(doc => {
-        return {
-          _id: doc._id,
-          title: doc.title,
-          description: doc.description,
-          request: {
-            type: 'GET',
-            url: `${process.env.LOCALHOST_URL}/${routeName}/${doc._id}`
+    const userId = new mongoose.Types.ObjectId(req.params.userId);
+    const user = await getUserByIdService(userId);
+
+    if (user) {
+      const docs = await getBooksService({ user: req.params.userId });
+      return res.status(200).json({
+        count: docs.length,
+        description: `List of books uploaded by user: ${req.params.userId}`,
+        books: docs.map(doc => {
+          return {
+            _id: doc._id,
+            title: doc.title,
+            description: doc.description,
+            pdf: doc.pdf,
+            request: {
+              type: 'GET',
+              url: `${process.env.LOCALHOST_URL}/${routeName}/${doc._id}`,
+              description: 'Get this single product by ID at the above url'
+            }
           }
-        }
-      })
-    };
-    res.status(200).json(response);
-    return response;
+        })
+      });
+    } else {
+      return res.status(404).json({
+        message: 'No user record found for provided ID'
+      });
+    }
   } catch (err) {
-    res.status(500).json({
+    return res.status(500).json({
+      message: 'Invalid user ID',
       error: `${err}`
     });
   }
