@@ -65,7 +65,7 @@ export const createBookController = async (req: Request<CreateBookInput['body'],
 
     // TODO: extract this cloudinary upload code to a separate service
     if (req.file) {
-      console.log('file: ', req.file);
+      // console.log('file: ', req.file);
       const file = dataUri(req).content as string;
       // console.log(file)
       return uploader.upload(file).then(async (result) => {
