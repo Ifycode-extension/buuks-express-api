@@ -8,6 +8,7 @@ const requireUser = (req: Request, res: Response, next: NextFunction) => {
 
   if (!user) {
     return res.status(403).json({
+      message: 'Please sign in to your account to continue',
       error: 'Forbidden'
     });
   }

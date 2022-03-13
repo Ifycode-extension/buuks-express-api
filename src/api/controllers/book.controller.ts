@@ -9,10 +9,17 @@ import {
   createBookService,
   getOneBookService,
   deleteBookService,
-  getUserByIdService
+  getUserByIdService,
+  updateBookservice
 } from '../services/book.service';
 import dotenv from 'dotenv';
-import { CreateBookInput, DeleteBookInput, GetOneBookInput, UploadBookInput } from '../../middleware/schema/book.schema';
+import {
+  CreateBookInput,
+  DeleteBookInput,
+  GetOneBookInput,
+  UpdateBookInput,
+  UploadBookInput
+} from '../../middleware/schema/book.schema';
 import { dataUri } from '../../middleware/multer';
 import { uploader } from '../../config/cloudinary';
 
@@ -41,7 +48,7 @@ export const getBooksForEachUserController = async (req: Request, res: Response,
             request: {
               type: 'GET',
               url: `${process.env.LOCALHOST_URL}/${routeName}/${doc._id}`,
-              description: 'Get this single product by ID at the above url'
+              description: `Get this single ${bookItem} by ID at the above url`
             }
           }
         })
@@ -86,7 +93,7 @@ export const createBookController = async (req: Request<CreateBookInput['body'],
             request: {
               type: 'GET',
               url: `${process.env.LOCALHOST_URL}/${routeName}/${doc._id}`,
-              description: 'Get this single product by ID at the above url'
+              description: `Get this single ${bookItem} by ID at the above url`
             }
           }
         });
@@ -135,6 +142,62 @@ export const getOneBookController = async (req: Request<GetOneBookInput['params'
   }
 }
 
+export const updateBookController = async (req: Request<UpdateBookInput['params'], UploadBookInput['file']>, res: Response) => {
+  try {
+    const userId = res.locals.user._id;
+    const bookId = new mongoose.Types.ObjectId(req.params.bookId);
+    const book = await getOneBookService(bookId);
+
+    if (!book) {
+      return res.status(404).json({
+        message: 'No record found for provided ID'
+      });
+    }
+
+    if (book.user.toString() !== userId) {
+      return res.status(403).json({
+        message: 'Please sign in to your account to continue',
+        error: 'Forbidden'
+      });
+    }
+
+    // TODO: extract this cloudinary upload code to a separate service
+    // TODO: update should replace the previous PDF file attached to this book id
+    if (req.file) {
+      // console.log('file: ', req.file);
+      const file = dataUri(req).content as string;
+      // console.log(file)
+      return uploader.upload(file).then(async (result) => {
+        // console.log(result)
+        const pdf = result.url;
+        const body = { pdf, ...req.body };
+        // console.log('body: ', body);
+        //-----------------------------------------------------
+        await updateBookservice(bookId, body, { new: true });
+        res.status(200).json({
+          message: `${bookItem} updated successfully!`,
+          request: {
+            type: 'GET',
+            url: `${process.env.LOCALHOST_URL}/${routeName}/${bookId.toString()}`,
+            description: `Get this single ${bookItem} by ID at the above url`
+          }
+        });
+        //-----------------------------------------------------
+      }).catch((err) => res.status(400).json({
+        message: 'something went wrong while processing your request',
+        data: {
+          err
+        }
+      }));
+    }
+  } catch (err) {
+    res.status(500).json({
+      message: `Error updating ${bookItem}`,
+      error: `${err}`
+    });
+  }
+}
+
 export const deleteBookController = async (req: Request<DeleteBookInput['params']>, res: Response, next: NextFunction) => {
   try {
     const userId = res.locals.user._id;
@@ -149,6 +212,7 @@ export const deleteBookController = async (req: Request<DeleteBookInput['params'
 
     if (book.user.toString() !== userId) {
       return res.status(403).json({
+        message: 'Please sign in to your account to continue',
         error: 'Forbidden'
       });
     }
@@ -160,7 +224,7 @@ export const deleteBookController = async (req: Request<DeleteBookInput['params'
       request: {
         type: 'POST',
         url: `${process.env.LOCALHOST_URL}/${routeName}`,
-        description: 'Create a new product at the above url'
+        description: `Create a new ${bookItem} at the above url`
       }
     });
   } catch (err) {

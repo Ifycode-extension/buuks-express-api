@@ -1,4 +1,4 @@
-import { DocumentDefinition, FilterQuery, QueryOptions } from 'mongoose';
+import { DocumentDefinition, FilterQuery, UpdateQuery, QueryOptions } from 'mongoose';
 import { BookDocument, BookModel as Book } from '../models/book.model';
 import { UserDocument, UserModel as User } from '../models/user.model';
 
@@ -20,6 +20,11 @@ export const createBookService = async (input: DocumentDefinition<Omit<BookDocum
 export const getOneBookService = async (query: FilterQuery<BookDocument>, options: QueryOptions = { lean: true }) => {
   const findbyid = Book.findById(query, {}, options);
   return findbyid;
+}
+
+export const updateBookservice = async (query: FilterQuery<BookDocument>, update: UpdateQuery<BookDocument>, options: QueryOptions) => {
+  const findbyidandupdate = Book.findByIdAndUpdate(query, update, options);
+  return findbyidandupdate;
 }
 
 export const deleteBookService = async (query: FilterQuery<BookDocument>) => {

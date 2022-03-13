@@ -1,8 +1,8 @@
 # Buuks API
-"Buuks" instead of "books"... Another angle 😉 The API allows a user to interact with a database made for storing books. API is able to do the following: CRUD operations for books, User signup, authentication (and basic authorization), PDF file upload to Cloudinary. More descriptive explanations in the sections below.
+"Buuks" instead of "books"... Another angle 😉 The API allows a user to interact with a database made for storing books. API is able to do the following: CRUD operations for books, User signup, authentication (and basic authorization), PDF file upload to Cloudinary and uses zod for resource validation. More descriptive explanations in the sections below.
+<br/>
 
-
-## API design and usage
+## API design
 
 |Methods & endpoints|Description|Request body|Auth (access token)|
 |--|--|:--:|:--:|
@@ -13,21 +13,29 @@
 |POST /books|Create a new book (authenticated user)|title, description, pdf (file upload)|Use access token from the POST /auth/login response|
 |GET /books/user/:userId|Get/view only books created by a particular user, using the user ID|No request body|No need for access token|
 |GET /books/:bookId|Get/view a book stored in the database, using the book ID|No request body|No need for access token|
+|PUT /books/:bookId|Update already existing book in the database, using the book ID|title, description, pdf (file upload)|Use access token from the POST /auth/login response|
 |DELETE /books/:bookId|Delete a book from the database, using the book ID|No request body|Use access token from the POST /auth/login response|
+<br/>
 
-## POST /users/signup
-**Request body**
-````
+## Request body and response breakdown
+
+<details>
+<summary>POST /users/signup</summary>
+<br/>
+    <b>Request body</b>
+    <br/><br/>
+<pre>
 {
     "email": "string",
     "password": "string",
     "passwordConfirmation": "string",
     "name": "string"
 }
-````
-
-**Example response**
-````
+</pre>
+<br/>
+     <b>Successful response (sample)</b>
+    <br/><br/>
+<pre>
 {
     "email": "string",
     "name": "string",
@@ -35,33 +43,47 @@
     "createdAt": "string",
     "updatedAt": "string"
 }
-````
+</pre>
+</details>
 
+##
 
-## POST /auth/login
-**Request body**
-````
+<details>
+<summary>POST /auth/login</summary>
+<br/>
+    <b>Request body</b>
+    <br/><br/>
+<pre>
 {
     "email": "string",
     "password": "string"
 }
-````
-
-**Example response**
-````
+</pre>
+<br/>
+     <b>Successful response (sample)</b>
+    <br/><br/>
+<pre>
 {
     "accessToken": "string",
     "refreshToken": "string"
 }
-````
+</pre>
+</details>
 
-## GET /auth/sessions
-````
+##
+
+<details>
+<summary>GET /auth/sessions</summary>
+<br/>
+    <b>Request body</b>
+    <br/><br/>
+<pre>
 No response body
-````
-
-**Example response**
-````
+</pre>
+<br/>
+     <b>Successful response (sample)</b>
+    <br/><br/>
+<pre>
 [
     {
         "_id": "string",
@@ -73,28 +95,42 @@ No response body
     },
     // etc.
 ]
-````
+</pre>
+</details>
 
-## DELETE /auth/sessions
-````
+##
+
+<details>
+<summary>DELETE /auth/sessions</summary>
+<br/>
+    <b>Request body</b>
+    <br/><br/>
+<pre>
 No response body
-````
-
-**Example response**
-````
+</pre>
+<br/>
+     <b>Successful response (sample)</b>
+    <br/><br/>
+<pre>
 {
     "accessToken": null,
     "refreshToken": null
 }
-````
+</pre>
+</details>
 
-### POST /books
-**Request body**
+##
 
-Use form-data (in postman). The **title** and **description** keys should have value of type **string**. The **pdf** key should have the value of type file.
-
-**Example response**
-````
+<details>
+<summary>POST /books</summary>
+<br/>
+    <b>Request body</b>
+    <br/><br/>
+    Use form-data (in postman). The <b>title</b> and <b>description</b> keys should have value of type <b>string</b>. The <b>pdf</b> key should have the value of type file.
+<br/><br/>
+     <b>Successful response (sample)</b>
+    <br/><br/>
+<pre>
 {
     "message": "string",
     "book": {
@@ -110,15 +146,23 @@ Use form-data (in postman). The **title** and **description** keys should have v
         }
     }
 }
-````
+</pre>
+</details>
 
-## GET /books/user/:userId
-````
+##
+
+<details>
+<summary>GET /books/user/:userId</summary>
+<br/>
+    <b>Request body</b>
+    <br/><br/>
+<pre>
 No response body
-````
-
-**Example response**
-````
+</pre>
+<br/>
+     <b>Successful response (sample)</b>
+    <br/><br/>
+<pre>
 {
     "count": number,
     "description": "string",
@@ -137,16 +181,23 @@ No response body
         // etc.
     ]
 }
-````
+</pre>
+</details>
 
-## GET /books/:bookId
+##
 
-````
+<details>
+<summary>GET /books/:bookId</summary>
+<br/>
+    <b>Request body</b>
+    <br/><br/>
+<pre>
 No response body
-````
-
-**Example response**
-````
+</pre>
+<br/>
+     <b>Successful response (sample)</b>
+    <br/><br/>
+<pre>
 {
     "_id": "string",
     "title": "string",
@@ -159,16 +210,22 @@ No response body
         "description": "string"
     }
 }
-````
+</pre>
+</details>
 
-## DELETE /books/:bookId
 
-````
-No response body
-````
+##
 
-**Example response**
-````
+<details>
+<summary>PUT /books/:bookId</summary>
+<br/>
+    <b>Request body</b>
+    <br/><br/>
+    Use form-data (in postman). The <b>title</b> and <b>description</b> keys should have value of type <b>string</b>. The <b>pdf</b> key should have the value of type file.
+<br/><br/>
+     <b>Successful response (sample)</b>
+    <br/><br/>
+<pre>
 {
     "message": "string",
     "request": {
@@ -177,5 +234,39 @@ No response body
         "description": "string"
     }
 }
-````
+</pre>
+</details>
 
+
+##
+
+<details>
+<summary>DELETE /books/:bookId</summary>
+<br/>
+    <b>Request body</b>
+    <br/><br/>
+<pre>
+No response body
+</pre>
+<br/>
+     <b>Successful response (sample)</b>
+    <br/><br/>
+<pre>
+{
+    "message": "string",
+    "request": {
+        "type": "string",
+        "url": "string",
+        "description": "string"
+    }
+}
+</pre>
+</details>
+<br/>
+
+## Helpful learning (and bug fixing) resources
+- [TomDoesTech's youtube video: REST API with Node.js, Express, TypeScript, MongoDB & Zod](https://www.youtube.com/watch?v=BWUi6BS9T5Y)
+- [Academind's youtube playlist: Building a RESTful API with Node.js](https://youtube.com/playlist?list=PL55RiY5tL51q4D-B63KBnygU6opNPFk_q)
+- [Okpukoro Joe's Article: Uploading Images to Cloudinary Using Multer and ExpressJS](https://medium.com/@joeokpus/uploading-images-to-cloudinary-using-multer-and-expressjs-f0b9a4e14c54)
+- [Yilmaz's stackoverflow answer to multer/clouudinary issue: Converting image to base64 with data-uri with typescript](https://stackoverflow.com/a/67904206/15012852)
+- [JWT doc: Introduction to JSON Web Tokens](https://jwt.io/introduction)
