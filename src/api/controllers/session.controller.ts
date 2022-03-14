@@ -37,6 +37,10 @@ export const createSessionController = async (req: Request, res: Response) => {
 
     //return access and refresh token
     return res.status(200).json({
+      user: {
+        name: user.name,
+        _id: user._id
+      },
       accessToken,
       refreshToken
     });
@@ -52,7 +56,10 @@ export const getUserSessionsController = async (req: Request, res: Response) => 
   // console.log('userId: ', userId);
   const sessions = await getUserSessionsService({ user: userId, valid: true });
   // console.log('Sessions: ', sessions);
-  return res.status(200).json(sessions);
+  return res.status(200).json({
+    count: sessions.length,
+    sessions: sessions
+  });
 }
 
 export const deleteUserSessionController = async (req: Request, res: Response) => {
@@ -60,7 +67,9 @@ export const deleteUserSessionController = async (req: Request, res: Response) =
   const sessionId = res.locals.user.session;
 
   // set valid (for a session) to false so that user is not able to reuse that session
-  const test = await updateUserSessionService({ _id: sessionId }, { valid: false });
+  await updateUserSessionService({ _id: sessionId }, { valid: false });
+
+  // console.log(test);
 
   return res.status(200).json({
     accessToken: null,
