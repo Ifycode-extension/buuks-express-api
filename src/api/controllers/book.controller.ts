@@ -38,7 +38,7 @@ export const getBooksForEachUserController = async (req: Request, res: Response,
       const docs = await getBooksService({ user: req.params.userId });
       return res.status(200).json({
         count: docs.length,
-        description: `List of books uploaded by user: ${req.params.userId}`,
+        description: `List of books uploaded by user: ${user.name}, user ID: ${req.params.userId}`,
         books: docs.map(doc => {
           return {
             _id: doc._id,
@@ -68,6 +68,7 @@ export const getBooksForEachUserController = async (req: Request, res: Response,
 
 export const createBookController = async (req: Request<CreateBookInput['body'], UploadBookInput['file']>, res: Response) => {
   try {
+    const userName = res.locals.user.name;
     const userId = res.locals.user._id;
 
     // TODO: extract any cloudinary upload code to a separate service for reuse, and just call the service when needed
@@ -85,6 +86,10 @@ export const createBookController = async (req: Request<CreateBookInput['body'],
         const doc = await createBookService({ ...body, user: userId });
         return res.status(201).json({
           message: `New ${bookItem} created successfully!`,
+          user: {
+            name: userName,
+            _id: userId,
+          },
           book: {
             _id: doc._id,
             title: doc.title,
@@ -145,6 +150,7 @@ export const getOneBookController = async (req: Request<GetOneBookInput['params'
 
 export const updateBookController = async (req: Request<UpdateBookInput['params'], UploadBookInput['file']>, res: Response) => {
   try {
+    const userName = res.locals.user.name;
     const userId = res.locals.user._id;
     const bookId = new mongoose.Types.ObjectId(req.params.bookId);
     const book = await getOneBookService(bookId);
@@ -157,7 +163,7 @@ export const updateBookController = async (req: Request<UpdateBookInput['params'
 
     if (book.user.toString() !== userId) {
       return res.status(403).json({
-        message: 'Please sign in to your account to continue',
+        message: `Only the book\'s owner is authorized to perform this operation. One loggedin user is not permitted to update another user\'s book, supply the bookID for any of the books you created. Find your books with their bookIDs at: GET /books/user/${userId}`,
         error: 'Forbidden'
       });
     }
@@ -176,6 +182,10 @@ export const updateBookController = async (req: Request<UpdateBookInput['params'
         await updateBookservice(bookId, body, { new: true });
         res.status(200).json({
           message: `${bookItem} updated successfully!`,
+          user: {
+            name: userName,
+            _id: userId,
+          },
           request: {
             type: 'GET',
             url: `${process.env.API_HOST_URL}/${routeName}/${bookId.toString()}`,
@@ -200,6 +210,7 @@ export const updateBookController = async (req: Request<UpdateBookInput['params'
 
 export const deleteBookController = async (req: Request<DeleteBookInput['params']>, res: Response, next: NextFunction) => {
   try {
+    const userName = res.locals.user.name;
     const userId = res.locals.user._id;
     const bookId = new mongoose.Types.ObjectId(req.params.bookId);
     const book = await getOneBookService(bookId);
@@ -212,7 +223,7 @@ export const deleteBookController = async (req: Request<DeleteBookInput['params'
 
     if (book.user.toString() !== userId) {
       return res.status(403).json({
-        message: 'Please sign in to your account to continue',
+        message: `Only the book\'s owner is authorized to perform this operation. One loggedin user is not permitted to delete another user\'s book, supply the bookID for any of the books you created. Find your books with their bookIDs at: GET /books/user/${userId}`,
         error: 'Forbidden'
       });
     }
@@ -223,6 +234,10 @@ export const deleteBookController = async (req: Request<DeleteBookInput['params'
 
     res.status(200).json({
       message: `${bookItem} deleted successfully!`,
+      user: {
+        name: userName,
+        _id: userId,
+      },
       request: {
         type: 'POST',
         url: `${process.env.API_HOST_URL}/${routeName}`,

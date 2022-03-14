@@ -29,8 +29,8 @@ router.post('/',
 router.get('/user/:userId', getBooksForEachUserController);
 router.get('/:bookId', validateResource(getOneBookSchema), getOneBookController);
 router.put('/:bookId',
-  multerUploadsMiddleware,
   requireUser,
+  multerUploadsMiddleware,
   validateResource(updateBookSchema),
   validateResource(uploadBookSchema),
   updateBookController
