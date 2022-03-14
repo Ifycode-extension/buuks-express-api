@@ -48,5 +48,8 @@
     "@types/pino": "^7.0.5",
     "chalk": "^5.0.0",
     "ts-node-dev": "^1.1.8"
+  },
+  "engines": {
+    "node": "16.x"
   }
 }
