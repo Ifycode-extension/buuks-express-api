@@ -1,6 +1,14 @@
 # Buuks API
-"Buuks" instead of "books"... Another angle 😉 The API allows a user to interact with a database made for storing books. API is able to do the following: CRUD operations for books, User signup, authentication (and basic authorization), PDF file upload to Cloudinary and uses zod for resource validation. More descriptive explanations in the sections below.
+"Buuks" instead of "books"... Another angle 😉 The API allows a user to interact with a database made for storing books. API is built with nodejs, expressjs and mongoDB, and is able to do the following: CRUD operations for books which are saved in the database, user signup, authentication (and basic authorization), PDF file upload to Cloudinary and uses zod for resource validation. More descriptive explanations in the sections below.
 <br/>
+
+> Hosted on Heroku: https://buuks-express-api.herokuapp.com
+
+## Running the API in development
+Set your API_HOST_URL and other needed environment variable in the .env file you create (see example in .env.example file). Use the command below to run the API locally on your computer:
+````
+npm run dev
+````
 
 ## API design
 
