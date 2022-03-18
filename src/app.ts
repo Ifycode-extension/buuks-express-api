@@ -1,7 +1,7 @@
 import express, { Express, NextFunction, Request, Response } from 'express';
 import dotenv from 'dotenv';
 import morgan from 'morgan';
-// import cors from 'cors';
+import cors from 'cors';
 import { router as appRouter } from './api/routes/app.route';
 import { router as userRoute } from './api/routes/user.route';
 import { router as sessionRouter } from './api/routes/session.route';
@@ -19,7 +19,7 @@ app.use(express.urlencoded({
 }));
 app.use(express.json());
 
-//app.use(cors({ origin: `http://localhost:${process.env.CLIENT_PORT}` }));
+app.use(cors({ origin: `${process.env.CLIENT_HOST_URL}` }));
 
 app.use('*', cloudinaryConfig);
 
