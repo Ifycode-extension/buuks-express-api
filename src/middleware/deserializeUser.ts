@@ -20,7 +20,8 @@ const deserializeUser = async (req: Request, res: Response, next: NextFunction) 
   //console.log('decoded: ', decoded);
 
   if (decoded) { //  i.e. if there's valid JWT
-    res.locals.user = decoded;
+    // res.locals.user = decoded;
+    res.locals = {user: decoded}
     return next();
   }
 
@@ -37,7 +38,8 @@ const deserializeUser = async (req: Request, res: Response, next: NextFunction) 
 
     const result = verifyJwt(newAccessToken as string);
 
-    res.locals.user = result.decoded;
+    // res.locals.user = result.decoded;
+    res.locals = {user: result.decoded}
     return next();
   }
 
