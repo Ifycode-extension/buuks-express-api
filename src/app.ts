@@ -39,7 +39,7 @@ interface Error {
 }
 
 app.use((req: Request, res: Response, next: NextFunction) => {
-  const err: Error = new Error('Route not found!');
+  const err: Error = new Error('Not found!');
   err.status = 404;
   next(err);
 });
