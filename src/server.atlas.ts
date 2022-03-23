@@ -1,4 +1,4 @@
-import mongooseConnect from './db.connect';
+import mongooseAtlasConnect from './dbatlas.connect';
 import { app as app } from './app';
 
 const port = process.env.PORT || 3000;
@@ -6,7 +6,7 @@ const port = process.env.PORT || 3000;
 app.listen(port, async () => {
   try {
     console.log(`\nServer running at ${process.env.API_HOST_URL}`);
-    await mongooseConnect();
+    await mongooseAtlasConnect();
   } catch (err) {
     console.log(err);
   }
