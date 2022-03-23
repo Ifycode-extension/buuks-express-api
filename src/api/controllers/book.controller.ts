@@ -162,9 +162,9 @@ export const updateBookController = async (req: Request<UpdateBookInput['params'
     }
 
     if (book.user.toString() !== userId) {
-      return res.status(403).json({
+      return res.status(401).json({
         message: `Only the book\'s owner is authorized to perform this operation. One loggedin user is not permitted to update another user\'s book, supply the bookID for any of the books you created. Find your books with their bookIDs at: GET /books/user/${userId}`,
-        error: 'Forbidden'
+        error: 'Unauthorized'
       });
     }
 
@@ -222,9 +222,9 @@ export const deleteBookController = async (req: Request<DeleteBookInput['params'
     }
 
     if (book.user.toString() !== userId) {
-      return res.status(403).json({
+      return res.status(401).json({
         message: `Only the book\'s owner is authorized to perform this operation. One loggedin user is not permitted to delete another user\'s book, supply the bookID for any of the books you created. Find your books with their bookIDs at: GET /books/user/${userId}`,
-        error: 'Forbidden'
+        error: 'Unauthorized'
       });
     }
 
