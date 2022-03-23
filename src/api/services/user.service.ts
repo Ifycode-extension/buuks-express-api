@@ -3,9 +3,13 @@ import { DocumentDefinition, FilterQuery } from 'mongoose';
 import { UserDocument, UserModel } from '../models/user.model';
 
 export const createUserService = async (
-  input: DocumentDefinition<Omit<UserDocument, 'createdAt' | 'updatedAt' | 'comparePassword'>>
+  { email, password, name }: DocumentDefinition<Omit<UserDocument, 'createdAt' | 'updatedAt' | 'comparePassword'>>
 ) => {
-  const query = await UserModel.create(input);
+  const query = await UserModel.create({
+    email,
+    password,
+    name
+  });
   return query;
 }
 

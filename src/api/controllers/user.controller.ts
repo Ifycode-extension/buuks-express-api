@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import { omit } from 'lodash';
+import { userInfo } from 'os';
 import { CreateUserInput } from '../../middleware/schema/user.schema';
 import { createUserService } from '../services/user.service';
 
@@ -9,7 +10,12 @@ export const createUserController = async (
 ) => {
   try {
     const user = await createUserService(req.body);
-    return res.status(201).json(omit(user.toJSON(), 'password'));
+    const userWithoutPassword = omit(user.toJSON(), 'password');
+    return res.status(201).json({
+      user: {
+        ...userWithoutPassword
+      }
+    });
   } catch (err) {
     return res.status(409).json({
       error: `${err}`
