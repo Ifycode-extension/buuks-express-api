@@ -179,10 +179,16 @@ export const updateBookController = async (req: Request, res: Response) => {
           name: userName,
           _id: userId,
         },
-        request: {
-          type: 'GET',
-          url: `${process.env.API_HOST_URL}/${routeName}/${bookId.toString()}`,
-          description: `Get this single ${bookItem} by ID at the above url`
+        book: {
+          _id: doc?._id,
+          title: doc?.title,
+          description: doc?.description,
+          pdf: doc?.pdf,
+          request: {
+            type: 'GET',
+            url: `${process.env.API_HOST_URL}/${routeName}/${bookId.toString()}`,
+            description: `Get this single ${bookItem} by ID at the above url`
+          }
         }
       });
     }
