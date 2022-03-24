@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+import mongoose, { UpdateQuery } from 'mongoose';
 import {
   NextFunction,
   Request,
@@ -17,11 +17,11 @@ import {
   CreateBookInput,
   DeleteBookInput,
   GetOneBookInput,
-  UpdateBookInput,
   UploadBookInput
 } from '../../middleware/schema/book.schema';
 import { dataUri } from '../../middleware/multer';
 import { uploader } from '../../config/cloudinary';
+import { BookDocument } from '../models/book.model';
 
 dotenv.config();
 
@@ -29,35 +29,37 @@ let bookItem: string = 'book';
 let routeName: string = `${bookItem}s`;
 
 export const getBooksForEachUserController = async (req: Request, res: Response, next: NextFunction) => {
-
   try {
     const userId = new mongoose.Types.ObjectId(req.params.userId);
     const user = await getUserByIdService(userId);
+    // console.log('user: ', user);
+    const docs = await getBooksService({ user: userId });
+    // console.log(docs);
 
-    if (user) {
-      const docs = await getBooksService({ user: req.params.userId });
-      return res.status(200).json({
-        count: docs.length,
-        description: `List of books uploaded by user: ${user.name}, user ID: ${req.params.userId}`,
-        books: docs.map(doc => {
-          return {
-            _id: doc._id,
-            title: doc.title,
-            description: doc.description,
-            pdf: doc.pdf,
-            request: {
-              type: 'GET',
-              url: `${process.env.API_HOST_URL}/${routeName}/${doc._id}`,
-              description: `Get this single ${bookItem} by ID at the above url`
-            }
-          }
-        })
-      });
-    } else {
-      return res.status(404).json({
-        message: 'No user record found for provided ID'
+    if (user === null || user === undefined) {
+      return res.status(401).json({
+        message: `Only the book\'s owner is authorized to perform this operation. One loggedin user is not permitted to update another user\'s book, supply the bookID for any of the books you created.`,
+        error: 'Unauthorized'
       });
     }
+
+    return res.status(200).json({
+      count: docs.length,
+      description: `List of books uploaded by user: ${user?.name}, user ID: ${user?._id}`,
+      books: docs.map(doc => {
+        return {
+          _id: doc._id,
+          title: doc.title,
+          description: doc.description,
+          pdf: doc.pdf,
+          request: {
+            type: 'GET',
+            url: `${process.env.API_HOST_URL}/${routeName}/${doc._id}`,
+            description: `Get this single ${bookItem} by ID at the above url`
+          }
+        }
+      })
+    });
   } catch (err) {
     return res.status(500).json({
       message: 'Invalid user ID',
@@ -148,7 +150,7 @@ export const getOneBookController = async (req: Request<GetOneBookInput['params'
   }
 }
 
-export const updateBookController = async (req: Request<UpdateBookInput['params'], UploadBookInput['file']>, res: Response) => {
+export const updateBookController = async (req: Request, res: Response) => {
   try {
     const userName = res.locals.user.name;
     const userId = res.locals.user._id;
@@ -162,12 +164,34 @@ export const updateBookController = async (req: Request<UpdateBookInput['params'
     }
 
     if (book.user.toString() !== userId) {
-      return res.status(403).json({
+      return res.status(401).json({
         message: `Only the book\'s owner is authorized to perform this operation. One loggedin user is not permitted to update another user\'s book, supply the bookID for any of the books you created. Find your books with their bookIDs at: GET /books/user/${userId}`,
-        error: 'Forbidden'
+        error: 'Unauthorized'
       });
     }
 
+    const updateBook = async (body: UpdateQuery<BookDocument>) => {
+      const doc = await updateBookservice(bookId, body, { new: true });
+      console.log(body);
+      res.status(200).json({
+        message: `${bookItem} updated successfully!`,
+        user: {
+          name: userName,
+          _id: userId,
+        },
+        book: {
+          _id: doc?._id,
+          title: doc?.title,
+          description: doc?.description,
+          pdf: doc?.pdf,
+          request: {
+            type: 'GET',
+            url: `${process.env.API_HOST_URL}/${routeName}/${bookId.toString()}`,
+            description: `Get this single ${bookItem} by ID at the above url`
+          }
+        }
+      });
+    }
     // TODO: Not only in DB. On Cloudinary, update should replace the previous PDF file attached to this book id
     if (req.file) {
       // console.log('file: ', req.file);
@@ -179,19 +203,7 @@ export const updateBookController = async (req: Request<UpdateBookInput['params'
         const body = { pdf, ...req.body };
         // console.log('body: ', body);
         //-----------------------------------------------------
-        await updateBookservice(bookId, body, { new: true });
-        res.status(200).json({
-          message: `${bookItem} updated successfully!`,
-          user: {
-            name: userName,
-            _id: userId,
-          },
-          request: {
-            type: 'GET',
-            url: `${process.env.API_HOST_URL}/${routeName}/${bookId.toString()}`,
-            description: `Get this single ${bookItem} by ID at the above url`
-          }
-        });
+        updateBook(body);
         //-----------------------------------------------------
       }).catch((err) => res.status(400).json({
         message: 'something went wrong while processing your request',
@@ -199,6 +211,8 @@ export const updateBookController = async (req: Request<UpdateBookInput['params'
           err
         }
       }));
+    } else {
+      updateBook(req.body);
     }
   } catch (err) {
     res.status(500).json({
@@ -222,9 +236,9 @@ export const deleteBookController = async (req: Request<DeleteBookInput['params'
     }
 
     if (book.user.toString() !== userId) {
-      return res.status(403).json({
+      return res.status(401).json({
         message: `Only the book\'s owner is authorized to perform this operation. One loggedin user is not permitted to delete another user\'s book, supply the bookID for any of the books you created. Find your books with their bookIDs at: GET /books/user/${userId}`,
-        error: 'Forbidden'
+        error: 'Unauthorized'
       });
     }
 

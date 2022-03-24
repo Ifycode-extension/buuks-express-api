@@ -2,10 +2,21 @@ import { omit } from 'lodash';
 import { DocumentDefinition, FilterQuery } from 'mongoose';
 import { UserDocument, UserModel } from '../models/user.model';
 
-export const createUserService = async (
-  input: DocumentDefinition<Omit<UserDocument, 'createdAt' | 'updatedAt' | 'comparePassword'>>
+export const checkExistingUserService = async (
+  { email, password, name }: DocumentDefinition<Omit<UserDocument, 'createdAt' | 'updatedAt' | 'comparePassword'>>
 ) => {
-  const query = await UserModel.create(input);
+  const existingUser = await UserModel.findOne({ email });
+  return existingUser;
+}
+
+export const createUserService = async (
+  { email, password, name }: DocumentDefinition<Omit<UserDocument, 'createdAt' | 'updatedAt' | 'comparePassword'>>
+) => {
+  const query = await UserModel.create({
+    email,
+    password,
+    name
+  });
   return query;
 }
 

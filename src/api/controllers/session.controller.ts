@@ -35,14 +35,15 @@ export const createSessionController = async (req: Request, res: Response) => {
       { expiresIn: `${process.env.REFRESHTOKEN_TTL}` } // will live for the duration of e.g. year specified in the .env file
     );
 
-    //return access and refresh token
+    //return user, access and refresh token
     return res.status(200).json({
       user: {
         name: user.name,
+        email: user.email,
         _id: user._id
       },
       accessToken,
-      refreshToken
+      // refreshToken
     });
   } catch (err) {
     return res.status(500).json({

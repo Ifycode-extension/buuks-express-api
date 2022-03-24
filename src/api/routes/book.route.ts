@@ -5,7 +5,6 @@ import {
   createBookSchema,
   deleteBookSchema,
   getOneBookSchema,
-  updateBookSchema,
   uploadBookSchema
 } from '../../middleware/schema/book.schema';
 import validateResource from '../../middleware/validate';
@@ -26,13 +25,11 @@ router.post('/',
   validateResource(uploadBookSchema),
   createBookController
 );
-router.get('/user/:userId', getBooksForEachUserController);
+router.get('/user/:userId', requireUser, getBooksForEachUserController);
 router.get('/:bookId', validateResource(getOneBookSchema), getOneBookController);
 router.put('/:bookId',
   requireUser,
   multerUploadsMiddleware,
-  validateResource(updateBookSchema),
-  validateResource(uploadBookSchema),
   updateBookController
 );
 router.delete('/:bookId',

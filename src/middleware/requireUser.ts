@@ -9,9 +9,9 @@ const requireUser = (req: Request, res: Response, next: NextFunction) => {
   // console.log('user: ', user);
 
   if (!user) {
-    return res.status(403).json({
+    return res.status(401).json({
       message: 'You are Logged out. Please sign in to your account to continue',
-      error: 'Forbidden'
+      error: 'Unauthorized'
     });
   }
 
