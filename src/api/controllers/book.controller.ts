@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+import mongoose, { UpdateQuery } from 'mongoose';
 import {
   NextFunction,
   Request,
@@ -17,11 +17,11 @@ import {
   CreateBookInput,
   DeleteBookInput,
   GetOneBookInput,
-  UpdateBookInput,
   UploadBookInput
 } from '../../middleware/schema/book.schema';
 import { dataUri } from '../../middleware/multer';
 import { uploader } from '../../config/cloudinary';
+import { BookDocument } from '../models/book.model';
 
 dotenv.config();
 
@@ -148,7 +148,7 @@ export const getOneBookController = async (req: Request<GetOneBookInput['params'
   }
 }
 
-export const updateBookController = async (req: Request<UpdateBookInput['params'], UploadBookInput['file']>, res: Response) => {
+export const updateBookController = async (req: Request, res: Response) => {
   try {
     const userName = res.locals.user.name;
     const userId = res.locals.user._id;
@@ -168,6 +168,22 @@ export const updateBookController = async (req: Request<UpdateBookInput['params'
       });
     }
 
+    const updateBook = async (body: UpdateQuery<BookDocument>) => {
+      const doc = await updateBookservice(bookId, body, { new: true });
+      console.log(body);
+      res.status(200).json({
+        message: `${bookItem} updated successfully!`,
+        user: {
+          name: userName,
+          _id: userId,
+        },
+        request: {
+          type: 'GET',
+          url: `${process.env.API_HOST_URL}/${routeName}/${bookId.toString()}`,
+          description: `Get this single ${bookItem} by ID at the above url`
+        }
+      });
+    }
     // TODO: Not only in DB. On Cloudinary, update should replace the previous PDF file attached to this book id
     if (req.file) {
       // console.log('file: ', req.file);
@@ -179,19 +195,7 @@ export const updateBookController = async (req: Request<UpdateBookInput['params'
         const body = { pdf, ...req.body };
         // console.log('body: ', body);
         //-----------------------------------------------------
-        await updateBookservice(bookId, body, { new: true });
-        res.status(200).json({
-          message: `${bookItem} updated successfully!`,
-          user: {
-            name: userName,
-            _id: userId,
-          },
-          request: {
-            type: 'GET',
-            url: `${process.env.API_HOST_URL}/${routeName}/${bookId.toString()}`,
-            description: `Get this single ${bookItem} by ID at the above url`
-          }
-        });
+        updateBook(body);
         //-----------------------------------------------------
       }).catch((err) => res.status(400).json({
         message: 'something went wrong while processing your request',
@@ -199,6 +203,8 @@ export const updateBookController = async (req: Request<UpdateBookInput['params'
           err
         }
       }));
+    } else {
+      updateBook(req.body);
     }
   } catch (err) {
     res.status(500).json({
