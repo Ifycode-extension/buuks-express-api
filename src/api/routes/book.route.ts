@@ -25,7 +25,7 @@ router.post('/',
   validateResource(uploadBookSchema),
   createBookController
 );
-router.get('/user/:userId', getBooksForEachUserController);
+router.get('/user/:userId', requireUser, getBooksForEachUserController);
 router.get('/:bookId', validateResource(getOneBookSchema), getOneBookController);
 router.put('/:bookId',
   requireUser,

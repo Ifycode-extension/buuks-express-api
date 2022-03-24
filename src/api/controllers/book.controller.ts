@@ -29,35 +29,37 @@ let bookItem: string = 'book';
 let routeName: string = `${bookItem}s`;
 
 export const getBooksForEachUserController = async (req: Request, res: Response, next: NextFunction) => {
-
   try {
     const userId = new mongoose.Types.ObjectId(req.params.userId);
     const user = await getUserByIdService(userId);
+    // console.log('user: ', user);
+    const docs = await getBooksService({ user: userId });
+    // console.log(docs);
 
-    if (user) {
-      const docs = await getBooksService({ user: req.params.userId });
-      return res.status(200).json({
-        count: docs.length,
-        description: `List of books uploaded by user: ${user.name}, user ID: ${req.params.userId}`,
-        books: docs.map(doc => {
-          return {
-            _id: doc._id,
-            title: doc.title,
-            description: doc.description,
-            pdf: doc.pdf,
-            request: {
-              type: 'GET',
-              url: `${process.env.API_HOST_URL}/${routeName}/${doc._id}`,
-              description: `Get this single ${bookItem} by ID at the above url`
-            }
-          }
-        })
-      });
-    } else {
-      return res.status(404).json({
-        message: 'No user record found for provided ID'
+    if (user === null || user === undefined) {
+      return res.status(401).json({
+        message: `Only the book\'s owner is authorized to perform this operation. One loggedin user is not permitted to update another user\'s book, supply the bookID for any of the books you created.`,
+        error: 'Unauthorized'
       });
     }
+
+    return res.status(200).json({
+      count: docs.length,
+      description: `List of books uploaded by user: ${user?.name}, user ID: ${user?._id}`,
+      books: docs.map(doc => {
+        return {
+          _id: doc._id,
+          title: doc.title,
+          description: doc.description,
+          pdf: doc.pdf,
+          request: {
+            type: 'GET',
+            url: `${process.env.API_HOST_URL}/${routeName}/${doc._id}`,
+            description: `Get this single ${bookItem} by ID at the above url`
+          }
+        }
+      })
+    });
   } catch (err) {
     return res.status(500).json({
       message: 'Invalid user ID',
