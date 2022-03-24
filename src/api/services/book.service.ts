@@ -3,7 +3,7 @@ import { BookDocument, BookModel as Book } from '../models/book.model';
 import { UserDocument, UserModel as User } from '../models/user.model';
 
 export const getBooksService = async (filter: Record<string, any>) => {
-  const query = await Book.find(filter);
+  const query = await Book.find(filter).sort('-createdAt');
   return query;
 }
 
@@ -12,7 +12,7 @@ export const getUserByIdService = async (query: FilterQuery<UserDocument>, optio
   return finduserbyid;
 }
 
-export const createBookService = async (input: DocumentDefinition<Omit<BookDocument, 'createdAt' | 'updatedAt'>>) => {
+export const createBookService = async (input: BookDocument /*DocumentDefinition<Omit<BookDocument, 'createdAt' | 'updatedAt'>>*/) => {
   const save = Book.create(input);
   return save;
 }
