@@ -24,6 +24,12 @@ const file_payload = {
     size: number({
       required_error: 'File size should be greater than 1 bytes'
     }).min(1),
+    mimetype: string({
+      required_error: 'File mimetype is required and should be of type application/pdf'
+    })
+  }).refine(data => data.mimetype === 'application/pdf', {
+    message: 'File must be a pdf file',
+    path: ['mimetype']
   }),
 }
 
