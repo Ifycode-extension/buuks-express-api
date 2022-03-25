@@ -172,8 +172,7 @@ export const updateBookController = async (req: Request, res: Response) => {
 
     const updateBook = async (body: UpdateQuery<BookDocument>) => {
       const doc = await updateBookservice(bookId, body, { new: true });
-      console.log(body);
-      console.log(Object.keys(body).length === 0);
+      // console.log(body);
       let message: string;
       if (Object.keys(body).length === 0) {
         message = 'No change made';
