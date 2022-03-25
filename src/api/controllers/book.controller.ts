@@ -173,8 +173,15 @@ export const updateBookController = async (req: Request, res: Response) => {
     const updateBook = async (body: UpdateQuery<BookDocument>) => {
       const doc = await updateBookservice(bookId, body, { new: true });
       console.log(body);
+      console.log(Object.keys(body).length === 0);
+      let message: string;
+      if (Object.keys(body).length === 0) {
+        message = 'No change made';
+      } else {
+        message = `${bookItem} updated successfully!`;
+      }
       res.status(200).json({
-        message: `${bookItem} updated successfully!`,
+        message: message,
         user: {
           name: userName,
           _id: userId,

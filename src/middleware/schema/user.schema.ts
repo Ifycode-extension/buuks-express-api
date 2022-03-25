@@ -12,7 +12,7 @@ export const createUserSchema = object({
       required_error: 'Name is required'
     }).email('Not a valid email'),
   }).refine(data => data.password === data.passwordConfirmation, {
-    message: 'Passwords do not maatch',
+    message: 'Passwords do not match',
     path: ['passwordConfirmation']
   }),
 });
