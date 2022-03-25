@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "ts-node-dev --respawn --transpile-only src/server.ts",
     "dev:atlas": "ts-node-dev --respawn --transpile-only src/server.atlas.ts",
-    "start": "node build/server.js",
+    "start": "node build/server.atlas.js",
     "build": "tsc",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
