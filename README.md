@@ -4,12 +4,6 @@
 
 > Hosted on Heroku: https://buuks-express-api.herokuapp.com
 
-## Running the API in development
-Set your API_HOST_URL and other needed environment variable in the .env file you create (see example in .env.example file). Use the command below to run the API locally on your computer:
-````
-npm run dev
-````
-
 ## API design
 
 |Methods & endpoints|Description|Request body|Auth (access token)|
@@ -271,6 +265,22 @@ No response body
 </pre>
 </details>
 <br/>
+
+## Running the API in development
+Set your API_HOST_URL and other needed environment variables in the .env file you create (see example in .env.example file). Use the commands below to run the API locally on your computer.
+
+Install dependencies:
+````
+npm install
+````
+Start server for connection to mongoDB (local):
+````
+npm run dev
+````
+Start server for connection to mongoDB (Atlas):
+````
+npm run dev:atlas
+````
 
 ## Helpful learning (and bug fixing) resources
 - [TomDoesTech's youtube video: REST API with Node.js, Express, TypeScript, MongoDB & Zod](https://www.youtube.com/watch?v=BWUi6BS9T5Y)
