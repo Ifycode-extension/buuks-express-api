@@ -1,14 +1,14 @@
 # @Ifycode/buuks-express-api
+<br/>
 
 > Hosted on Heroku: https://buuks-express-api.herokuapp.com
 
+#
 "Buuks" instead of "books"... Another angle 😉 The API allows an (authenticated) user to interact with a database made for storing books. API is built with nodejs, expressjs and mongoDB, and is able to do the following: 
 - Create Read Update Delete operations for books which are saved in the database
 - User signup, authentication and (basic) authorization
 - PDF file upload to Cloudinary 
 - Uses zod for resource validation
-More descriptive explanations in the sections below.
-<br/>
 
 ## API design
 
