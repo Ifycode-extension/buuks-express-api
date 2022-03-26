@@ -17,10 +17,10 @@ npm run dev
 |POST /users/signup|Create new user| email, password, passwordConfirmation, name|Not required|
 |POST /users/login|Sign in as existing user, create access token and refresh token for use in all endpoints that require access token|email, password|Access token is generated at this endpoint|
 |GET /users/sessions|Gets all users sessions made through the POST /users/login endpoint. Also reissues an access token (if access token is expired and there's refresh token) |No request body|Use access token from the POST /users/login response|
-|DELETE /users/sessions|Deletes the last recorded session created through the POST /users/login endpoint (it's supposed to update it and not delete, should fix this later)|No request body|Use access token from the POST /users/login response|
+|DELETE /users/sessions|Deletes the last recorded session created through the POST /users/login endpoint (Note: this endpoint may need fixing)|No request body|Use access token from the POST /users/login response|
 |POST /books|Create a new book (authenticated user)|title, description, pdf (file upload)|Use access token from the POST /users/login response|
-|GET /books/user/:userId|Get/view only books created by a particular user, using the user ID|No request body|Not required|
-|GET /books/:bookId|Get/view a book stored in the database, using the book ID|No request body|Not required|
+|GET /books/user/:userId|Get/view only books created by a particular user, using the user ID|No request body|Use access token from the POST /users/login response|
+|GET /books/:bookId|Get/view a book stored in the database, using the book ID|No request body|Not required (for now)|
 |PUT /books/:bookId|Update already existing book in the database, using the book ID|title, description, pdf (file upload)|Use access token from the POST /users/login response|
 |DELETE /books/:bookId|Delete a book from the database, using the book ID|No request body|Use access token from the POST /users/login response|
 <br/>
