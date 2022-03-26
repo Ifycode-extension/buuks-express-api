@@ -273,7 +273,7 @@ No response body
 <br/>
 
 ## Running the API in development
-Set your API_HOST_URL and other needed environment variables in the .env file you create (see example in .env.example file). Use the commands below to run the API locally on your computer.
+Make sure to either have mongoDB installed and running on your computer, or have a monogDB atlas cluster set up in the cloud. Set your API_HOST_URL and other needed environment variables in the .env file you create (see example in .env.example file). Use the commands below to run the API locally on your computer.
 
 Install dependencies:
 ````
