@@ -224,7 +224,6 @@ No response body
     "description": "string",
     "pdf": "string",
     "user": {
-        "name": "string",
         "_id": "string"
     },
     "request": {
