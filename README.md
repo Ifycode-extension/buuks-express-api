@@ -25,7 +25,7 @@
 |DELETE /books/:bookId|Delete a book from the database, using the book ID|No request body|Use access token from the POST /users/login response|
 <br/>
 
-## Request body and response breakdown
+## Request body and (successful) response
 
 <details>
 <summary>POST /users/signup</summary>
@@ -45,11 +45,13 @@
     <br/><br/>
 <pre>
 {
-    "email": "string",
-    "name": "string",
-    "_id": "string",
-    "createdAt": "string",
-    "updatedAt": "string"
+    "user": {
+        "email": "string",
+        "name": "string",
+        "_id": "string",
+        "createdAt": "string",
+        "updatedAt": "string"
+    }
 }
 </pre>
 </details>
@@ -72,8 +74,12 @@
     <br/><br/>
 <pre>
 {
-    "accessToken": "string",
-    "refreshToken": "string"
+    "user": {
+        "name": "string",
+        "email": "string",
+        "_id": "string"
+    },
+    "accessToken": "string"
 }
 </pre>
 </details>
@@ -92,17 +98,20 @@ No response body
      <b>Successful response (sample)</b>
     <br/><br/>
 <pre>
-[
-    {
-        "_id": "string",
-        "user": "string",
-        "password": boolean,
-        "userAgent": "string",
-        "createdAt": "string",
-        "updatedAt": "string",
-    },
-    // etc.
-]
+{
+    "count": number,
+    "sessions": [
+        {
+            "_id": "string",
+            "user": "string",
+            "password": boolean,
+            "userAgent": "string",
+            "createdAt": "string",
+            "updatedAt": "string"
+        },
+        // etc.
+    ]
+}
 </pre>
 </details>
 
@@ -140,13 +149,16 @@ No response body
     <br/><br/>
 <pre>
 {
-    "message": "string",
+    "message": "string"
+    "user": {
+        "name": "string",
+        "_id": "string"
+    },
     "book": {
         "_id": "string",
         "title": "string",
         "description": "string",
-        "pdf": "string",
-        "user": "string",
+        "pdf": "string"
         "request": {
             "type": "string",
             "url": "string",
@@ -211,7 +223,10 @@ No response body
     "title": "string",
     "description": "string",
     "pdf": "string",
-    "user": "string",
+    "user": {
+        "name": "string",
+        "_id": "string"
+    },
     "request": {
         "type": "string",
         "url": "string",
@@ -235,11 +250,21 @@ No response body
     <br/><br/>
 <pre>
 {
-    "message": "string",
-    "request": {
-        "type": "string",
-        "url": "string",
-        "description": "string"
+    "message": "string"
+    "user": {
+        "name": "string",
+        "_id": "string"
+    },
+    "book": {
+        "_id": "string",
+        "title": "string",
+        "description": "string",
+        "pdf": "string"
+        "request": {
+            "type": "string",
+            "url": "string",
+            "description": "string"
+        }
     }
 }
 </pre>
@@ -261,7 +286,11 @@ No response body
     <br/><br/>
 <pre>
 {
-    "message": "string",
+    "message": "string"
+    "user": {
+        "name": "string",
+        "_id": "string"
+    },
     "request": {
         "type": "string",
         "url": "string",
