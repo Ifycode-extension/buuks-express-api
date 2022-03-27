@@ -97,7 +97,6 @@ export const createBookController = async (req: Request<CreateBookInput['body'],
             title: doc.title,
             description: doc.description,
             pdf: doc.pdf,
-            user: doc.user,
             request: {
               type: 'GET',
               url: `${process.env.API_HOST_URL}/${routeName}/${doc._id}`,
@@ -130,7 +129,9 @@ export const getOneBookController = async (req: Request<GetOneBookInput['params'
         title: doc.title,
         description: doc.description,
         pdf: doc.pdf,
-        user: doc.user,
+        user: {
+          _id: doc.user,
+        },
         request: {
           type: 'GET',
           url: `${process.env.API_HOST_URL}/${routeName}`,

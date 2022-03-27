@@ -1,31 +1,31 @@
-# Buuks API
-"Buuks" instead of "books"... Another angle 😉 The API allows a user to interact with a database made for storing books. API is built with nodejs, expressjs and mongoDB, and is able to do the following: CRUD operations for books which are saved in the database, user signup, authentication (and basic authorization), PDF file upload to Cloudinary and uses zod for resource validation. More descriptive explanations in the sections below.
+# @Ifycode/buuks-express-api
 <br/>
 
 > Hosted on Heroku: https://buuks-express-api.herokuapp.com
 
-## Running the API in development
-Set your API_HOST_URL and other needed environment variable in the .env file you create (see example in .env.example file). Use the command below to run the API locally on your computer:
-````
-npm run dev
-````
+#
+"Buuks" instead of "books"... Another angle 😉 The API allows an (authenticated) user to interact with a database made for storing books. API is built with nodejs, expressjs and mongoDB, and is able to do the following: 
+- Create Read Update Delete operations for books which are saved in the database
+- User signup, authentication and (basic) authorization
+- PDF file upload to Cloudinary 
+- Uses zod for resource validation
 
 ## API design
 
 |Methods & endpoints|Description|Request body|Auth (access token)|
 |--|--|:--:|:--:|
 |POST /users/signup|Create new user| email, password, passwordConfirmation, name|Not required|
-|POST /auth/login|Sign in as existing user, create access token and refresh token for use in all endpoints that require access token|email, password|Access token is generated at this endpoint|
-|GET /auth/sessions|Gets all users sessions made through the POST /auth/login endpoint. Also reissues an access token (if access token is expired and there's refresh token) |No request body|Use access token from the POST /auth/login response|
-|DELETE /auth/sessions|Deletes the last recorded session created through the POST /auth/login endpoint (it's supposed to update it and not delete, should fix this later)|No request body|Use access token from the POST /auth/login response|
-|POST /books|Create a new book (authenticated user)|title, description, pdf (file upload)|Use access token from the POST /auth/login response|
-|GET /books/user/:userId|Get/view only books created by a particular user, using the user ID|No request body|Not required|
-|GET /books/:bookId|Get/view a book stored in the database, using the book ID|No request body|Not required|
-|PUT /books/:bookId|Update already existing book in the database, using the book ID|title, description, pdf (file upload)|Use access token from the POST /auth/login response|
-|DELETE /books/:bookId|Delete a book from the database, using the book ID|No request body|Use access token from the POST /auth/login response|
+|POST /users/login|Sign in as existing user, create access token and refresh token for use in all endpoints that require access token|email, password|Access token is generated at this endpoint|
+|GET /users/sessions|Gets all users sessions made through the POST /users/login endpoint. Also reissues an access token (if access token is expired and there's refresh token) |No request body|Use access token from the POST /users/login response|
+|DELETE /users/sessions|Deletes the last recorded session created through the POST /users/login endpoint (Note: this endpoint may need fixing)|No request body|Use access token from the POST /users/login response|
+|POST /books|Create a new book (authenticated user)|title, description, pdf (file upload)|Use access token from the POST /users/login response|
+|GET /books/user/:userId|Get/view only books created by a particular user, using the user ID|No request body|Use access token from the POST /users/login response|
+|GET /books/:bookId|Get/view a book stored in the database, using the book ID|No request body|Not required (for now)|
+|PUT /books/:bookId|Update already existing book in the database, using the book ID|title, description, pdf (file upload)|Use access token from the POST /users/login response|
+|DELETE /books/:bookId|Delete a book from the database, using the book ID|No request body|Use access token from the POST /users/login response|
 <br/>
 
-## Request body and response breakdown
+## Request body and (successful) response
 
 <details>
 <summary>POST /users/signup</summary>
@@ -45,11 +45,13 @@ npm run dev
     <br/><br/>
 <pre>
 {
-    "email": "string",
-    "name": "string",
-    "_id": "string",
-    "createdAt": "string",
-    "updatedAt": "string"
+    "user": {
+        "email": "string",
+        "name": "string",
+        "_id": "string",
+        "createdAt": "string",
+        "updatedAt": "string"
+    }
 }
 </pre>
 </details>
@@ -57,7 +59,7 @@ npm run dev
 ##
 
 <details>
-<summary>POST /auth/login</summary>
+<summary>POST /users/login</summary>
 <br/>
     <b>Request body</b>
     <br/><br/>
@@ -72,8 +74,12 @@ npm run dev
     <br/><br/>
 <pre>
 {
-    "accessToken": "string",
-    "refreshToken": "string"
+    "user": {
+        "name": "string",
+        "email": "string",
+        "_id": "string"
+    },
+    "accessToken": "string"
 }
 </pre>
 </details>
@@ -81,7 +87,7 @@ npm run dev
 ##
 
 <details>
-<summary>GET /auth/sessions</summary>
+<summary>GET /users/sessions</summary>
 <br/>
     <b>Request body</b>
     <br/><br/>
@@ -92,24 +98,27 @@ No response body
      <b>Successful response (sample)</b>
     <br/><br/>
 <pre>
-[
-    {
-        "_id": "string",
-        "user": "string",
-        "password": boolean,
-        "userAgent": "string",
-        "createdAt": "string",
-        "updatedAt": "string",
-    },
-    // etc.
-]
+{
+    "count": number,
+    "sessions": [
+        {
+            "_id": "string",
+            "user": "string",
+            "password": boolean,
+            "userAgent": "string",
+            "createdAt": "string",
+            "updatedAt": "string"
+        },
+        // etc.
+    ]
+}
 </pre>
 </details>
 
 ##
 
 <details>
-<summary>DELETE /auth/sessions</summary>
+<summary>DELETE /users/sessions</summary>
 <br/>
     <b>Request body</b>
     <br/><br/>
@@ -140,13 +149,16 @@ No response body
     <br/><br/>
 <pre>
 {
-    "message": "string",
+    "message": "string"
+    "user": {
+        "name": "string",
+        "_id": "string"
+    },
     "book": {
         "_id": "string",
         "title": "string",
         "description": "string",
-        "pdf": "string",
-        "user": "string",
+        "pdf": "string"
         "request": {
             "type": "string",
             "url": "string",
@@ -211,7 +223,9 @@ No response body
     "title": "string",
     "description": "string",
     "pdf": "string",
-    "user": "string",
+    "user": {
+        "_id": "string"
+    },
     "request": {
         "type": "string",
         "url": "string",
@@ -235,11 +249,21 @@ No response body
     <br/><br/>
 <pre>
 {
-    "message": "string",
-    "request": {
-        "type": "string",
-        "url": "string",
-        "description": "string"
+    "message": "string"
+    "user": {
+        "name": "string",
+        "_id": "string"
+    },
+    "book": {
+        "_id": "string",
+        "title": "string",
+        "description": "string",
+        "pdf": "string"
+        "request": {
+            "type": "string",
+            "url": "string",
+            "description": "string"
+        }
     }
 }
 </pre>
@@ -261,7 +285,11 @@ No response body
     <br/><br/>
 <pre>
 {
-    "message": "string",
+    "message": "string"
+    "user": {
+        "name": "string",
+        "_id": "string"
+    },
     "request": {
         "type": "string",
         "url": "string",
@@ -271,6 +299,22 @@ No response body
 </pre>
 </details>
 <br/>
+
+## Running the API in development
+Make sure to either have mongoDB installed and running on your computer, or have a monogDB atlas cluster set up in the cloud. Set your API_HOST_URL and other needed environment variables in the .env file you create (see example in .env.example file). Use the commands below to run the API locally on your computer.
+
+Install dependencies:
+````
+npm install
+````
+Start server for connection to mongoDB (local):
+````
+npm run dev
+````
+Start server for connection to mongoDB (Atlas):
+````
+npm run dev:atlas
+````
 
 ## Helpful learning (and bug fixing) resources
 - [TomDoesTech's youtube video: REST API with Node.js, Express, TypeScript, MongoDB & Zod](https://www.youtube.com/watch?v=BWUi6BS9T5Y)
