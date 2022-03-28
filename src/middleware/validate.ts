@@ -3,7 +3,7 @@ import { AnyZodObject } from 'zod';
 
 const validateResource = (schema: AnyZodObject) => (req: Request, res: Response, next: NextFunction) => {
   try {
-    // console.log("Validate this  request body: ",  req.body)
+    // console.log("Validate this request body: ", req.body)
     // console.log("Validate this file: ", req.file)
     schema.parse({
       body: req.body,

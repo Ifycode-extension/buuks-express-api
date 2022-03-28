@@ -220,7 +220,9 @@ export const updateBookController = async (req: Request, res: Response) => {
         }
       }));
     } else {
+      //-----------------------------------------------------
       updateBook(req.body);
+      //-----------------------------------------------------
     }
   } catch (err) {
     res.status(500).json({
