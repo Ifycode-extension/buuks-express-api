@@ -173,9 +173,10 @@ export const updateBookController = async (req: Request, res: Response) => {
 
     const updateBook = async (body: UpdateQuery<BookDocument>) => {
       const doc = await updateBookservice(bookId, body, { new: true });
-      // console.log(body);
+      let dbvalues = [{ title: doc?.title, description: doc?.description }, { title: doc?.title }, { description: doc?.description }];
+      let ifSame = dbvalues.some(value => JSON.stringify(Object.values(body)) === JSON.stringify(Object.values(value)));
       let message: string;
-      if (Object.keys(body).length === 0) {
+      if (Object.keys(body).length === 0 || ifSame) {
         message = 'No change made';
       } else {
         message = `${bookItem} updated successfully!`;
